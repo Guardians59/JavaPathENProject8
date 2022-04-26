@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
-import ms.gpsutil.config.DB;
 import ms.gpsutil.model.User;
 import ms.gpsutil.service.IDistanceCalculService;
 import ms.gpsutil.service.IGPSUtilService;
@@ -26,21 +26,19 @@ public class GPSUtilServiceImpl implements IGPSUtilService{
     @Autowired
     IDistanceCalculService distanceCalculService;
 
-    @Autowired
-    DB db;
-
     private Logger logger = LoggerFactory.getLogger(GPSUtilServiceImpl.class);
     private GpsUtil gpsUtil = new GpsUtil();
 
     @Override
-    public VisitedLocation getUserLocation(User user) {
+    public VisitedLocation getUserLocation(UUID userId) {
 	Locale.setDefault(Locale.ENGLISH);
 	VisitedLocation visitedLocation = null;
+	User user = new User();
 	logger.debug("Search the user location");
 
-	if(user != null) {
+	if(userId != null) {
 	    try {
-		visitedLocation = gpsUtil.getUserLocation(user.getUserId());
+		visitedLocation = gpsUtil.getUserLocation(userId);
 		user.addToVisitedLocations(visitedLocation);
 	    } catch (NumberFormatException e) {
 		logger.error("An error has occurred in the format of the position");

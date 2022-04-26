@@ -25,16 +25,16 @@ public class GPSUtilServiceTest {
 	// GIVEN
 	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 	// WHEN
-	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user);
+	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user.getUserId());
 	// THEN
 	assertTrue(visitedLocation.userId.equals(user.getUserId()));
     }
     @Test
     public void getErrorUserLocation() {
 	//GIVEN
-	User user = null;
+	User user = new User();
 	//WHEN
-	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user);
+	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user.getUserId());
 	//THEN
 	assertEquals(visitedLocation, null);
     }
@@ -43,7 +43,7 @@ public class GPSUtilServiceTest {
     public void getNearbyAttractions() {
 	//GIVEN
 	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user);
+	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user.getUserId());
 	//WHEN
 	List<Attraction> attractions = gpsUtilService.getNearByAttractions(visitedLocation);
 	//THEN
@@ -53,8 +53,8 @@ public class GPSUtilServiceTest {
     @Test
     public void getErrorNearbyAttractions() {
 	//GIVEN
-	User user = null;
-	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user);
+	User user = new User();
+	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user.getUserId());
 	//WHEN
 	List<Attraction> attractions = gpsUtilService.getNearByAttractions(visitedLocation);
 	//THEN
