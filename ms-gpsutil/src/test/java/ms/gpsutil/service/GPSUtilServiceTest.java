@@ -3,6 +3,7 @@ package ms.gpsutil.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class GPSUtilServiceTest {
     IGPSUtilService gpsUtilService;
 
     @Test
-    public void getUserLocation() {
+    public void getUserLocationTest() {
 	// GIVEN
 	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 	// WHEN
@@ -30,7 +31,7 @@ public class GPSUtilServiceTest {
 	assertTrue(visitedLocation.userId.equals(user.getUserId()));
     }
     @Test
-    public void getErrorUserLocation() {
+    public void getErrorUserLocationTest() {
 	//GIVEN
 	User user = new User();
 	//WHEN
@@ -40,7 +41,7 @@ public class GPSUtilServiceTest {
     }
 
     @Test
-    public void getNearbyAttractions() {
+    public void getNearbyAttractionsTest() {
 	//GIVEN
 	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user.getUserId());
@@ -51,7 +52,7 @@ public class GPSUtilServiceTest {
     }
     
     @Test
-    public void getErrorNearbyAttractions() {
+    public void getErrorNearbyAttractionsTest() {
 	//GIVEN
 	User user = new User();
 	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(user.getUserId());
@@ -59,6 +60,23 @@ public class GPSUtilServiceTest {
 	List<Attraction> attractions = gpsUtilService.getNearByAttractions(visitedLocation);
 	//THEN
 	assertEquals(attractions.isEmpty(), true);
+    }
+    
+    @Test
+    public void getAllLocationsUsersTest() {
+	//GIVEN
+	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+	User user2 = new User(UUID.randomUUID(), "fred", "000", "fred@tourGuide.com");
+	User user3 = new User(UUID.randomUUID(), "joe", "000", "joe@tourGuide.com");
+	List<UUID> list = new ArrayList<>();
+	list.add(user.getUserId());
+	list.add(user2.getUserId());
+	list.add(user3.getUserId());
+	List<VisitedLocation> result = new ArrayList<>();
+	//WHEN
+	result = gpsUtilService.getAllLocationsUsers(list);
+	//THEN
+	assertEquals(result.size(), 3);
     }
 
 }

@@ -14,9 +14,9 @@ public class User {
     private String phoneNumber;
     private String emailAddress;
     private Date latestLocationTimestamp;
-    private List<VisitedLocation> visitedLocations = new ArrayList<>();
+    private List<VisitedLocation> listVisitedLocations = new ArrayList<>();
+    private VisitedLocation lastVisitedLocation;
 
-    
     public User() {
 	
     }
@@ -61,19 +61,30 @@ public class User {
     }
 
     public void addToVisitedLocations(VisitedLocation visitedLocation) {
-	visitedLocations.add(visitedLocation);
+	listVisitedLocations.add(visitedLocation);
     }
 
     public List<VisitedLocation> getVisitedLocations() {
-	return visitedLocations;
+	return listVisitedLocations;
     }
 
     public void clearVisitedLocations() {
-	visitedLocations.clear();
+	listVisitedLocations.clear();
     }
 
+    public void setLastVisitedLocation(VisitedLocation lastVisitedLocation) {
+	this.lastVisitedLocation = lastVisitedLocation;
+    }
+    
     public VisitedLocation getLastVisitedLocation() {
-	return visitedLocations.get(visitedLocations.size() - 1);
+	return lastVisitedLocation;
+    }
+
+    @Override
+    public String toString() {
+	return "User [userId=" + userId + ", userName=" + userName + ", phoneNumber=" + phoneNumber + ", emailAddress="
+		+ emailAddress + ", latestLocationTimestamp=" + latestLocationTimestamp + ", listVisitedLocations="
+		+ listVisitedLocations + ", lastVisitedLocation=" + lastVisitedLocation + "]";
     }
 
 }

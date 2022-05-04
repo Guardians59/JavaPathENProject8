@@ -40,6 +40,7 @@ public class GPSUtilServiceImpl implements IGPSUtilService{
 	    try {
 		visitedLocation = gpsUtil.getUserLocation(userId);
 		user.addToVisitedLocations(visitedLocation);
+		user.setLastVisitedLocation(visitedLocation);
 	    } catch (NumberFormatException e) {
 		logger.error("An error has occurred in the format of the position");
 	    }
@@ -89,6 +90,24 @@ public class GPSUtilServiceImpl implements IGPSUtilService{
 	    logger.error("An error occurred while searching for the location of the user");
 	}
 	return nearByAttractions;
+    }
+
+    @Override
+    public List<VisitedLocation> getAllLocationsUsers(List<UUID> listUser) {
+	Locale.setDefault(Locale.ENGLISH);
+	List<VisitedLocation> result = new ArrayList<>();
+	logger.debug("Search the users locations");
+	
+	if(!listUser.isEmpty()) {
+	listUser.forEach(userId -> {
+	    VisitedLocation visitedLocation = gpsUtil.getUserLocation(userId);
+	    result.add(visitedLocation);
+	});
+	logger.info("User locations were successfully retrieved");
+	} else {
+	    logger.error("An error occurred while searching for the locations of the users");
+	}
+	return result;
     }
 
 }
