@@ -1,6 +1,7 @@
 package ms.gpsutil.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -14,15 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gpsUtil.GpsUtil;
-import gpsUtil.location.Attraction;
-import gpsUtil.location.VisitedLocation;
-import ms.gpsutil.model.User;
+import ms.gpsutil.model.Attraction;
+import ms.gpsutil.model.Location;
+import ms.gpsutil.model.VisitedLocation;
 import ms.gpsutil.service.IDistanceCalculService;
 import ms.gpsutil.service.IGPSUtilService;
 
 @Service
-public class GPSUtilServiceImpl implements IGPSUtilService{
-    
+public class GPSUtilServiceImpl implements IGPSUtilService {
+
     @Autowired
     IDistanceCalculService distanceCalculService;
 
@@ -32,15 +33,18 @@ public class GPSUtilServiceImpl implements IGPSUtilService{
     @Override
     public VisitedLocation getUserLocation(UUID userId) {
 	Locale.setDefault(Locale.ENGLISH);
-	VisitedLocation visitedLocation = null;
-	User user = new User();
+	VisitedLocation visitedLocation = new VisitedLocation();
 	logger.debug("Search the user location");
 
-	if(userId != null) {
+	if (userId != null) {
 	    try {
-		visitedLocation = gpsUtil.getUserLocation(userId);
-		user.addToVisitedLocations(visitedLocation);
-		user.setLastVisitedLocation(visitedLocation);
+		Double latitude = gpsUtil.getUserLocation(userId).location.latitude;
+		Double longitude = gpsUtil.getUserLocation(userId).location.longitude;
+		Location location = new Location(longitude, latitude);
+		Date date = new Date();
+		visitedLocation.setUserId(userId);
+		visitedLocation.setLocation(location);
+		visitedLocation.setTimeVisited(date);
 	    } catch (NumberFormatException e) {
 		logger.error("An error has occurred in the format of the position");
 	    }
@@ -53,15 +57,26 @@ public class GPSUtilServiceImpl implements IGPSUtilService{
 
     @Override
     public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
-	List<Attraction> attractions = gpsUtil.getAttractions();
+	List<Attraction> attractions = new ArrayList<>();
 	List<Attraction> nearByAttractions = new ArrayList<>();
 	TreeMap<Double, String> distanceList = new TreeMap<Double, String>();
 	logger.debug("Search for the five nearest attractions to the user");
 
-	if(visitedLocation != null) {
-	attractions.forEach(attraction -> {
-	    Double distance = distanceCalculService.getDistance(attraction, visitedLocation.location);
-	    String attractionName = attraction.attractionName;
+	if(visitedLocation.getUserId() != null && visitedLocation.getLocation() != null) {
+	
+	    gpsUtil.getAttractions().forEach(attraction -> {
+		   Attraction addAttraction = new Attraction();
+		   addAttraction.setAttractionId(attraction.attractionId);
+		   addAttraction.setAttractionName(attraction.attractionName);
+		   addAttraction.setCity(attraction.city);
+		   addAttraction.setState(attraction.state);
+		   addAttraction.setLatitude(attraction.latitude);
+		   addAttraction.setLongitude(attraction.longitude);
+		   attractions.add(addAttraction);
+		   
+	    Location locationAttraction = new Location(addAttraction.longitude, addAttraction.latitude);
+	    Double distance = distanceCalculService.getDistance(locationAttraction, visitedLocation.location);
+	    String attractionName = addAttraction.getAttractionName();
 
 	    if(distanceList.size() < 5) {
 		distanceList.put(distance, attractionName);
@@ -70,14 +85,14 @@ public class GPSUtilServiceImpl implements IGPSUtilService{
 		distanceList.remove(value);
 		distanceList.put(distance, attractionName);
 	    }
-	});
+	    });
 
 	Set<Entry<Double, String>> set = distanceList.entrySet();
 	set.stream().forEach(attractionDistance -> {
 	    String key = attractionDistance.getValue();
 
 	    attractions.forEach(attractionList -> {
-		if(attractionList.attractionName.equals(key)) {
+		if(attractionList.getAttractionName().equals(key)) {
 		    nearByAttractions.add(attractionList);
 		}
 	    });
@@ -90,24 +105,6 @@ public class GPSUtilServiceImpl implements IGPSUtilService{
 	    logger.error("An error occurred while searching for the location of the user");
 	}
 	return nearByAttractions;
-    }
-
-    @Override
-    public List<VisitedLocation> getAllLocationsUsers(List<UUID> listUser) {
-	Locale.setDefault(Locale.ENGLISH);
-	List<VisitedLocation> result = new ArrayList<>();
-	logger.debug("Search the users locations");
-	
-	if(!listUser.isEmpty()) {
-	listUser.forEach(userId -> {
-	    VisitedLocation visitedLocation = gpsUtil.getUserLocation(userId);
-	    result.add(visitedLocation);
-	});
-	logger.info("User locations were successfully retrieved");
-	} else {
-	    logger.error("An error occurred while searching for the locations of the users");
-	}
-	return result;
     }
 
 }

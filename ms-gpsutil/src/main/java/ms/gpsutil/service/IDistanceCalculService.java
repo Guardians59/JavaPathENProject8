@@ -1,6 +1,6 @@
 package ms.gpsutil.service;
 
-import gpsUtil.location.Location;
+import ms.gpsutil.model.Location;
 
 public interface IDistanceCalculService {
     

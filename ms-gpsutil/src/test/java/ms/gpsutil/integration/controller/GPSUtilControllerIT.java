@@ -41,20 +41,19 @@ public class GPSUtilControllerIT {
 
     @Test
     public void getLocationIT() throws Exception {
-	
 	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 
 	mockMvc.perform(MockMvcRequestBuilders.get("/getLocation?id="+user.getUserId())
 		.accept(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.longitude").isNotEmpty())
-		.andExpect(jsonPath("$.latitude").isNotEmpty())
+		.andExpect(jsonPath("$.location.longitude").isNotEmpty())
+		.andExpect(jsonPath("$.location.latitude").isNotEmpty())
+		.andExpect(jsonPath("$.timeVisited").isNotEmpty())
 		.andExpect(status().isOk())
 		.andDo(MockMvcResultHandlers.print());
     }
     
     @Test
     public void getNearByAttractionIT() throws Exception {
-	
 	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 	
 	mockMvc.perform(MockMvcRequestBuilders.get("/getNearByAttraction?id="+user.getUserId())
@@ -64,19 +63,4 @@ public class GPSUtilControllerIT {
 		.andDo(MockMvcResultHandlers.print());
     }
     
-    @Test
-    public void getAllLocations() throws Exception {
-	
-	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-	User user2 = new User(UUID.randomUUID(), "joe", "000", "joe@tourGuide.com");
-	
-	mockMvc.perform(MockMvcRequestBuilders.get("/getAllLocations?users="+user.getUserId()+","+user2.getUserId())
-		.accept(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.[0].location.longitude").exists())
-		.andExpect(jsonPath("$.[0].location.latitude").exists())
-		.andExpect(jsonPath("$.[1].location.longitude").exists())
-		.andExpect(jsonPath("$.[1].location.longitude").exists())
-		.andExpect(status().isOk());
-    }
-
 }

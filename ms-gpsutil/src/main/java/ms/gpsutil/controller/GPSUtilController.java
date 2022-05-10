@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import gpsUtil.location.Attraction;
-import gpsUtil.location.Location;
-import gpsUtil.location.VisitedLocation;
-import ms.gpsutil.controller.exception.ListOfUsersError;
+
 import ms.gpsutil.controller.exception.NearByAttractionError;
 import ms.gpsutil.controller.exception.UserLocationError;
+import ms.gpsutil.model.Attraction;
+import ms.gpsutil.model.VisitedLocation;
 import ms.gpsutil.service.IGPSUtilService;
 
 @RestController
@@ -25,12 +24,12 @@ public class GPSUtilController {
     
 
     @GetMapping("/getLocation")
-    public Location getLocation(@RequestParam UUID id) {
+    public VisitedLocation getLocation(@RequestParam UUID id) {
 	    VisitedLocation visitedLocation = gpsUtilService.getUserLocation(id);
 	    if(visitedLocation == null)
 		throw new UserLocationError(
 			"An error occurred while searching for the location of the user with the id " + id);
-	    return visitedLocation.location;
+	    return visitedLocation;
 	}
 
     @GetMapping("/getNearByAttraction")
@@ -49,17 +48,6 @@ public class GPSUtilController {
 	}
 
 	return listAttraction;
-    }
-    
-    @GetMapping("/getAllLocations")
-    public List<VisitedLocation> getAllLocations(@RequestParam List<UUID> userId) {
-	List<VisitedLocation> result = new ArrayList<>();
-	if(userId.isEmpty()) {
-	    throw new ListOfUsersError("An error occurred while searching for user locations");
-	} else {
-	    result = gpsUtilService.getAllLocationsUsers(userId);
-	}
-	return result;
     }
 
 }

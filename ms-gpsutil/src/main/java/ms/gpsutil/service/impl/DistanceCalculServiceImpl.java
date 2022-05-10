@@ -2,7 +2,7 @@ package ms.gpsutil.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import gpsUtil.location.Location;
+import ms.gpsutil.model.Location;
 import ms.gpsutil.service.IDistanceCalculService;
 
 @Service
