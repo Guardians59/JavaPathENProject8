@@ -118,4 +118,37 @@ public class GPSUtilControllerTest {
 		.andExpect(status().isNotFound());
     }
     
+    @Test
+    public void getAllAttractionsTest() throws Exception {
+	//GIVEN
+	List<Attraction> listAttraction = new ArrayList<>();
+	listAttraction.add(new Attraction("Disneyland", "Anaheim", "CA", 33.817595D, -117.922008D));
+	listAttraction.add(new Attraction("Jackson Hole", "Jackson Hole", "WY", 43.582767D, -110.821999D));
+	listAttraction.add(new Attraction("Mojave National Preserve", "Kelso", "CA", 35.141689D, -115.510399D));
+	listAttraction.add(new Attraction("Joshua Tree National Park", "Joshua Tree National Park", "CA", 33.881866D, -115.90065D));
+	listAttraction.add(new Attraction("Buffalo National River", "St Joe", "AR", 35.985512D, -92.757652D));
+	//WHEN
+	when(gpsUtilServiceMock.getAllAttractions()).thenReturn(listAttraction);
+	//THEN
+	mockMvc.perform(MockMvcRequestBuilders.get("/getAllAttractions")
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.[0].attractionName").value("Disneyland"))
+		.andExpect(jsonPath("$.[4].attractionName").value("Buffalo National River"))
+		.andExpect(status().isOk())
+		.andDo(MockMvcResultHandlers.print());
+    }
+    
+    @Test
+    public void getAllAttractionsErrorTest() throws Exception {
+	//GIVEN
+	List<Attraction> listAttraction = new ArrayList<>();
+	//WHEN
+	when(gpsUtilServiceMock.getAllAttractions()).thenReturn(listAttraction);
+	//THEN
+	mockMvc.perform(MockMvcRequestBuilders.get("/getAllAttractions")
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.[0].attractionName").doesNotExist())
+		.andExpect(status().isNotFound());
+    }
+    
 }

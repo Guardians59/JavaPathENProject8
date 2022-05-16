@@ -36,7 +36,7 @@ public class GPSUtilServiceImpl implements IGPSUtilService {
 	VisitedLocation visitedLocation = new VisitedLocation();
 	logger.debug("Search the user location");
 
-	if (userId != null) {
+	if(userId != null) {
 	    try {
 		Double latitude = gpsUtil.getUserLocation(userId).location.latitude;
 		Double longitude = gpsUtil.getUserLocation(userId).location.longitude;
@@ -63,48 +63,72 @@ public class GPSUtilServiceImpl implements IGPSUtilService {
 	logger.debug("Search for the five nearest attractions to the user");
 
 	if(visitedLocation.getUserId() != null && visitedLocation.getLocation() != null) {
-	
+
 	    gpsUtil.getAttractions().forEach(attraction -> {
-		   Attraction addAttraction = new Attraction();
-		   addAttraction.setAttractionId(attraction.attractionId);
-		   addAttraction.setAttractionName(attraction.attractionName);
-		   addAttraction.setCity(attraction.city);
-		   addAttraction.setState(attraction.state);
-		   addAttraction.setLatitude(attraction.latitude);
-		   addAttraction.setLongitude(attraction.longitude);
-		   attractions.add(addAttraction);
-		   
-	    Location locationAttraction = new Location(addAttraction.longitude, addAttraction.latitude);
-	    Double distance = distanceCalculService.getDistance(locationAttraction, visitedLocation.location);
-	    String attractionName = addAttraction.getAttractionName();
+		Attraction addAttraction = new Attraction();
+		addAttraction.setAttractionId(attraction.attractionId);
+		addAttraction.setAttractionName(attraction.attractionName);
+		addAttraction.setCity(attraction.city);
+		addAttraction.setState(attraction.state);
+		addAttraction.setLatitude(attraction.latitude);
+		addAttraction.setLongitude(attraction.longitude);
+		attractions.add(addAttraction);
 
-	    if(distanceList.size() < 5) {
-		distanceList.put(distance, attractionName);
-	    } else if(distanceList.lastKey() > distance) {
-		Double value = distanceList.lastKey();
-		distanceList.remove(value);
-		distanceList.put(distance, attractionName);
-	    }
-	    });
+		Location locationAttraction = new Location(addAttraction.longitude, addAttraction.latitude);
+		Double distance = distanceCalculService.getDistance(locationAttraction, visitedLocation.location);
+		String attractionName = addAttraction.getAttractionName();
 
-	Set<Entry<Double, String>> set = distanceList.entrySet();
-	set.stream().forEach(attractionDistance -> {
-	    String key = attractionDistance.getValue();
-
-	    attractions.forEach(attractionList -> {
-		if(attractionList.getAttractionName().equals(key)) {
-		    nearByAttractions.add(attractionList);
+		if(distanceList.size() < 5) {
+		    distanceList.put(distance, attractionName);
+		} else if (distanceList.lastKey() > distance) {
+		    Double value = distanceList.lastKey();
+		    distanceList.remove(value);
+		    distanceList.put(distance, attractionName);
 		}
 	    });
-	});
-	if(nearByAttractions.isEmpty() || nearByAttractions.size() < 5) {
-	    logger.error("An error occurred while searching for the nearest attractions");
+
+	    Set<Entry<Double, String>> set = distanceList.entrySet();
+	    set.stream().forEach(attractionDistance -> {
+		String key = attractionDistance.getValue();
+
+		attractions.forEach(attractionList -> {
+		    if(attractionList.getAttractionName().equals(key)) {
+			nearByAttractions.add(attractionList);
+		    }
+		});
+	    });
+	    if(nearByAttractions.isEmpty() || nearByAttractions.size() < 5) {
+		logger.error("An error occurred while searching for the nearest attractions");
+	    } else {
+		logger.info("The list of nearest attractions were successfully found");
+	    }
 	} else {
-	    logger.info("The list of nearest attractions were successfully found");
-	} } else {
 	    logger.error("An error occurred while searching for the location of the user");
 	}
 	return nearByAttractions;
+    }
+
+    @Override
+    public List<Attraction> getAllAttractions() {
+	List<Attraction> listAttraction = new ArrayList<>();
+	logger.debug("Search the list of attractions");
+	
+	gpsUtil.getAttractions().forEach(attraction -> {
+	    Attraction addAttraction = new Attraction();
+	    addAttraction.setAttractionId(attraction.attractionId);
+	    addAttraction.setAttractionName(attraction.attractionName);
+	    addAttraction.setCity(attraction.city);
+	    addAttraction.setState(attraction.state);
+	    addAttraction.setLatitude(attraction.latitude);
+	    addAttraction.setLongitude(attraction.longitude);
+	    listAttraction.add(addAttraction);
+	});
+	if(listAttraction.isEmpty()) {
+	logger.info("The attraction list is empty");
+	} else {
+	    logger.info("The attraction list were successfully found");
+	}
+	return listAttraction;
     }
 
 }

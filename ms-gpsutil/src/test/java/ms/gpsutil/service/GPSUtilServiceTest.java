@@ -3,6 +3,7 @@ package ms.gpsutil.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,6 +69,16 @@ public class GPSUtilServiceTest {
 	List<Attraction> attractions = gpsUtilService.getNearByAttractions(visitedLocation);
 	//THEN
 	assertEquals(attractions.isEmpty(), true);
+    }
+    
+    @Test
+    public void getAllAttractions() {
+	//GIVEN
+	List<Attraction> listAttraction = new ArrayList<>();
+	//WHEN
+	listAttraction = gpsUtilService.getAllAttractions();
+	//THEN
+	assertEquals(listAttraction.isEmpty(), false);
     }
 
 }

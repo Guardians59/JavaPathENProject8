@@ -63,4 +63,13 @@ public class GPSUtilControllerIT {
 		.andDo(MockMvcResultHandlers.print());
     }
     
+    @Test
+    public void getAllAttractionsIT() throws Exception {
+	mockMvc.perform(MockMvcRequestBuilders.get("/getAllAttractions")
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.[0]").exists())
+		.andExpect(status().isOk())
+		.andDo(MockMvcResultHandlers.print());
+    }
+    
 }

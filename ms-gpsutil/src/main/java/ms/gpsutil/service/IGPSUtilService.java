@@ -11,5 +11,7 @@ public interface IGPSUtilService {
     public VisitedLocation getUserLocation(UUID userId);
 
     public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation);
+    
+    public List<Attraction> getAllAttractions();
 
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import ms.gpsutil.controller.exception.AttractionListIsEmpty;
 import ms.gpsutil.controller.exception.NearByAttractionError;
 import ms.gpsutil.controller.exception.UserLocationError;
 import ms.gpsutil.model.Attraction;
@@ -47,6 +47,17 @@ public class GPSUtilController {
 		throw new NearByAttractionError("An error occurred while searching for the nearest attractions");
 	}
 
+	return listAttraction;
+    }
+    
+    @GetMapping("/getAllAttractions")
+    public List<Attraction> getAllAttractions() {
+	List<Attraction> listAttraction = new ArrayList<>();
+	listAttraction = gpsUtilService.getAllAttractions();
+	
+	if(listAttraction.isEmpty())
+	    throw new AttractionListIsEmpty("The attraction list is empty");
+	
 	return listAttraction;
     }
 
