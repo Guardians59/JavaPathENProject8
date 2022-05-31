@@ -19,6 +19,8 @@ public class Attraction {
       this.attractionName = attractionName;
       this.city = city;
       this.state = state;
+      this.latitude = latitude;
+      this.longitude = longitude;
       this.attractionId = UUID.randomUUID();
     }
 
