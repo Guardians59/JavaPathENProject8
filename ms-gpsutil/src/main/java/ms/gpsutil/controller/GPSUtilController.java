@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,9 +33,36 @@ public class GPSUtilController {
 			"An error occurred while searching for the location of the user with the id " + id);
 	    return visitedLocation;
 	}
+    
+    @PostMapping("/getLocation")
+    public VisitedLocation getLocationProxy(@RequestBody UUID id) {
+	    VisitedLocation visitedLocation = gpsUtilService.getUserLocation(id);
+	    if(visitedLocation == null)
+		throw new UserLocationError(
+			"An error occurred while searching for the location of the user with the id " + id);
+	    return visitedLocation;
+	}
 
     @GetMapping("/getNearByAttraction")
     public List<Attraction> getNearByAttraction(@RequestParam UUID id) {
+	List<Attraction> listAttraction = new ArrayList<>();
+	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(id);
+
+	if(visitedLocation == null) {
+	    throw new UserLocationError(
+		    "An error occurred while searching for the location of the user with the id " + id);
+	} else {
+	    listAttraction = gpsUtilService.getNearByAttractions(visitedLocation);
+
+	    if(listAttraction.isEmpty())
+		throw new NearByAttractionError("An error occurred while searching for the nearest attractions");
+	}
+
+	return listAttraction;
+    }
+    
+    @PostMapping("/getNearByAttraction")
+    public List<Attraction> getNearByAttractionProxy(@RequestBody UUID id) {
 	List<Attraction> listAttraction = new ArrayList<>();
 	VisitedLocation visitedLocation = gpsUtilService.getUserLocation(id);
 
