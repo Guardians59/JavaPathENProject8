@@ -11,19 +11,20 @@ import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
-import gpsUtil.location.Location;
-import gpsUtil.location.VisitedLocation;
 import tourGuide.helper.InternalTestHelper;
+import tourGuide.model.Location;
 import tourGuide.model.User;
-
+import tourGuide.model.VisitedLocation;
+@Repository
 public class DB {
 
     private Logger logger = LoggerFactory.getLogger(DB.class);
 
     public final Map<String, User> internalUserMap = new HashMap<>();
 
-    private void initializeInternalUsers() {
+    public void initializeInternalUsers() {
 	IntStream.range(0, InternalTestHelper.getInternalUserNumber()).forEach(i -> {
 	    String userName = "internalUser" + i;
 	    String phone = "000";

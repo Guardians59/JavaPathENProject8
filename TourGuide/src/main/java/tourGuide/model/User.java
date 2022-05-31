@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-import tripPricer.Provider;
+
 
 public class User {
 	private UUID userId;
@@ -33,6 +33,10 @@ public class User {
 	
 	public UUID getUserId() {
 		return userId;
+	}
+	
+	public void setUserName(String userName) {
+	    this.userName = userName;
 	}
 	
 	public String getUserName() {

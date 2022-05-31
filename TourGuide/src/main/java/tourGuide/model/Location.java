@@ -2,8 +2,9 @@ package tourGuide.model;
 
 public class Location {
     
-    public double longitude;
     public double latitude;
+    public double longitude;
+    
     
     public Location() {
 	
@@ -32,7 +33,7 @@ public class Location {
 
     @Override
     public String toString() {
-	return "Location [longitude=" + longitude + ", latitude=" + latitude + "]";
+	return "Location [latitude=" + latitude + ", longitude=" + longitude + "]";
     }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import tourGuide.model.Location;
 import tourGuide.model.User;
 import tourGuide.model.VisitedLocation;
+import tourGuide.proxies.IMicroServiceGPSUtilProxy;
 import tourGuide.repositories.UserRepository;
 import tourGuide.service.IUserLocationService;
 
@@ -22,6 +23,11 @@ public class UserLocationServiceImpl implements IUserLocationService {
     UserRepository userRepository;
     
     private Logger logger = LoggerFactory.getLogger(UserLocationServiceImpl.class);
+    private final IMicroServiceGPSUtilProxy gpsUtilProxy;
+    
+    public UserLocationServiceImpl(IMicroServiceGPSUtilProxy gpsUtilProxy) {
+	this.gpsUtilProxy = gpsUtilProxy;
+    }
 
     @Override
     public HashMap<Object, Object> getCurrentUserLocation(String userName) {
@@ -30,9 +36,11 @@ public class UserLocationServiceImpl implements IUserLocationService {
 	logger.debug("Search the last current location");
 	
 	if(user != null) {
-	Double longitude = user.getLastVisitedLocation().location.longitude;
-	Double latitude = user.getLastVisitedLocation().location.latitude;
-	Location location = new Location(longitude, latitude);
+	int size = user.getListVisitedLocations().size();
+	int lastVisited = size - 1;
+	Double longitude = user.getListVisitedLocations().get(lastVisited).location.longitude;
+	Double latitude = user.getListVisitedLocations().get(lastVisited).location.latitude;
+	Location location = new Location(latitude, longitude);
 	result.put(user.getUserId(), location);
 	logger.info("The last current location was successfully retrieved");
 	} else {
@@ -49,8 +57,10 @@ public class UserLocationServiceImpl implements IUserLocationService {
 	    User user = new User();
 	    user = userRepository.getUser(userName);
 	    if(user != null) {
-		Double longitude = user.getLastVisitedLocation().location.longitude;
-		Double latitude = user.getLastVisitedLocation().location.latitude;
+		int size = user.getListVisitedLocations().size();
+		int lastVisited = size - 1;
+		Double longitude = user.getListVisitedLocations().get(lastVisited).location.longitude;
+		Double latitude = user.getListVisitedLocations().get(lastVisited).location.latitude;
 		Location location = new Location(longitude, latitude);
 		result.put(user.getUserId(), location);
 	    } else {
@@ -66,7 +76,7 @@ public class UserLocationServiceImpl implements IUserLocationService {
     }
 
     @Override
-    public HashMap<String, Object> getAllLocationsHistorical(List<String> userNames) {
+    public HashMap<String, Object> getUsersLocationsHistorical(List<String> userNames) {
 	HashMap<String, Object> result = new HashMap<>();
 	List<VisitedLocation> locationHistorical = new ArrayList<>();
 	logger.debug("Search the historical location");
@@ -93,6 +103,26 @@ public class UserLocationServiceImpl implements IUserLocationService {
 	    logger.info("No location history found");
 	}
 	return result;
+    }
+
+    @Override
+    public VisitedLocation getUserLocation(String userName) {
+	VisitedLocation visitedLocation = new VisitedLocation();
+	User user = new User();
+	user = userRepository.getUser(userName);
+	logger.debug("Search the location of user " + userName);
+	if(user != null) {
+	    visitedLocation = gpsUtilProxy.getLocation(user.getUserId());
+	    if(visitedLocation.location != null) {
+	    user.addToListVisitedLocations(visitedLocation);
+	    logger.info("Location of user " + userName + " was found successfully");
+	    } else {
+		logger.error("An error has occured with the microService of GPS");
+	    }
+	} else {
+	    logger.error("An error has occured, user with username " + userName + " is not found");
+	}
+	return visitedLocation;
     }
 
 }
