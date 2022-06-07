@@ -15,13 +15,14 @@ public class Attraction {
 	
     }
     
-    public Attraction(String attractionName, String city, String state, double latitude, double longitude) {
+    public Attraction(UUID attractionId, String attractionName, String city, String state,
+	    double latitude, double longitude) {
+      this.attractionId = attractionId;
       this.attractionName = attractionName;
       this.city = city;
       this.state = state;
       this.latitude = latitude;
       this.longitude = longitude;
-      this.attractionId = UUID.randomUUID();
     }
 
     public String getAttractionName() {

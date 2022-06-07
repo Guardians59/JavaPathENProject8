@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,11 @@ public class AttractionServiceTest {
 	//GIVEN
 	User user = userRepository.getUser("internalUser4");
 	List<Attraction> list = new ArrayList<>();
-	list.add(new Attraction("Disneyland", "Anaheim", "CA", 33.817595D, -117.922008D));
-	list.add(new Attraction("Jackson Hole", "Jackson Hole", "WY", 43.582767D, -110.821999D));
-	list.add(new Attraction("Mojave National Preserve", "Kelso", "CA", 35.141689D, -115.510399D));
-	list.add(new Attraction("Joshua Tree National Park", "Joshua Tree National Park", "CA", 33.881866D, -115.90065D));
-	list.add(new Attraction("Buffalo National River", "St Joe", "AR", 35.985512D, -92.757652D));
+	list.add(new Attraction(UUID.randomUUID(), "Disneyland", "Anaheim", "CA", 33.817595D, -117.922008D));
+	list.add(new Attraction(UUID.randomUUID(), "Jackson Hole", "Jackson Hole", "WY", 43.582767D, -110.821999D));
+	list.add(new Attraction(UUID.randomUUID(), "Mojave National Preserve", "Kelso", "CA", 35.141689D, -115.510399D));
+	list.add(new Attraction(UUID.randomUUID(), "Joshua Tree National Park", "Joshua Tree National Park", "CA", 33.881866D, -115.90065D));
+	list.add(new Attraction(UUID.randomUUID(), "Buffalo National River", "St Joe", "AR", 35.985512D, -92.757652D));
 	List<Attraction> result = new ArrayList<>();
 	//WHEN
 	when(microServiceGPSUtilProxyMock.getNearByAttraction(user.getUserId())).thenReturn(list);
