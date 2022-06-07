@@ -1,12 +1,10 @@
 package tourGuide.service;
 
-import java.util.List;
-
-import tourGuide.model.Attraction;
+import java.util.HashMap;
 
 public interface IUserRewardsService {
 
-    public boolean saveReward(String userName, int rewardPoint, List<Attraction> attractions);
+    public HashMap<String, Integer> calculReward(String userName);
 
     public int cumulativeRewardPoints(String userName);
 
