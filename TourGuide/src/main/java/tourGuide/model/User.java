@@ -5,9 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-
-
-
 public class User {
 	private UUID userId;
 	private String userName;
@@ -15,7 +12,6 @@ public class User {
 	private String emailAddress;
 	private Date latestLocationTimestamp;
 	private List<VisitedLocation> listVisitedLocations = new ArrayList<>();
-	private VisitedLocation lastVisitedLocation;
 	private List<UserReward> userRewards = new ArrayList<>();
 	private UserPreferences userPreferences = new UserPreferences();
 	private List<Provider> tripDeals = new ArrayList<>();
@@ -79,16 +75,8 @@ public class User {
 		listVisitedLocations.clear();
 	}
 	
-	public VisitedLocation getLastVisitedLocation() {
-	    return lastVisitedLocation;
-	}
-
-	public void setLastVisitedLocation(VisitedLocation lastVisitedLocation) {
-	    this.lastVisitedLocation = lastVisitedLocation;
-	}
-	
 	public void addUserReward(UserReward userReward) {
-		if(userRewards.stream().filter(r -> !r.attraction.attractionName.equals(userReward.attraction.attractionName)).count() == 0) {
+		if(userRewards.stream().filter(r -> r.attraction.attractionName.equals(userReward.attraction.attractionName)).count() == 0) {
 			userRewards.add(userReward);
 		}
 	}
