@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import tourGuide.model.Attraction;
-import tourGuide.model.FeignRewardPointsModel;
 import tourGuide.model.Location;
 import tourGuide.model.User;
 import tourGuide.model.UserReward;
@@ -25,9 +24,7 @@ import tourGuide.repositories.UserRepository;
 
 @SpringBootTest
 public class UserRewardsServiceTest {
-    
-    @Autowired
-    IUserRewardsService userRewardsService;
+   
     
     @Autowired
     UserRepository userRepository;
@@ -37,6 +34,10 @@ public class UserRewardsServiceTest {
     
     @MockBean
     IMicroServiceGPSUtilProxy gpsUtilProxy;
+    
+    @Autowired
+    IUserRewardsService userRewardsService;
+    
     
     @Test
     public void calculRewardTest() {
@@ -55,8 +56,12 @@ public class UserRewardsServiceTest {
 	list.add(new Attraction(idMojave,"Mojave National Preserve", "Kelso", "CA", 35.141689D, -115.510399D));
 	list.add(new Attraction(idJoshua,"Joshua Tree National Park", "Joshua Tree National Park", "CA", 33.881866D, -115.90065D));
 	list.add(new Attraction(idBuffalo,"Buffalo National River", "St Joe", "AR", 35.985512D, -92.757652D));
-	FeignRewardPointsModel feignReward = new FeignRewardPointsModel(idDisney, user.getUserId());
-	FeignRewardPointsModel feignReward2 = new FeignRewardPointsModel(idJackson, user.getUserId());
+	HashMap<String, Object> mapId = new HashMap<>();
+	mapId.put("attractionId", idDisney);
+	mapId.put("userId", user.getUserId());
+	HashMap<String, Object> mapIdSecond = new HashMap<>();
+	mapIdSecond.put("attractionId", idJackson);
+	mapIdSecond.put("userId", user.getUserId());
 	HashMap<String, Integer> rewardDisney = new HashMap<>();
 	rewardDisney.put("reward", 150);
 	HashMap<String, Integer> rewardJackson = new HashMap<>();
@@ -64,8 +69,8 @@ public class UserRewardsServiceTest {
 	HashMap<String, Integer> result = new HashMap<>();
 	//WHEN
 	when(gpsUtilProxy.getAllAttractions()).thenReturn(list);
-	when(rewardCentralProxy.getRewardPoints(feignReward)).thenReturn(rewardDisney);
-	when(rewardCentralProxy.getRewardPoints(feignReward2)).thenReturn(rewardJackson);
+	when(rewardCentralProxy.getRewardPoints(mapId)).thenReturn(rewardDisney);
+	when(rewardCentralProxy.getRewardPoints(mapIdSecond)).thenReturn(rewardJackson);
 	result = userRewardsService.calculReward("internalUser2");
 	//THEN
 	assertEquals(result.containsKey("Disneyland"), true);
@@ -105,8 +110,12 @@ public class UserRewardsServiceTest {
 	List<Attraction> list = new ArrayList<>();
 	UUID idDisney = UUID.randomUUID();
 	UUID idJackson = UUID.randomUUID();
-	FeignRewardPointsModel feignReward = new FeignRewardPointsModel(idDisney, user.getUserId());
-	FeignRewardPointsModel feignReward2 = new FeignRewardPointsModel(idJackson, user.getUserId());
+	HashMap<String, Object> mapId = new HashMap<>();
+	mapId.put("attractionId", idDisney);
+	mapId.put("userId", user.getUserId());
+	HashMap<String, Object> mapIdSecond = new HashMap<>();
+	mapIdSecond.put("attractionId", idJackson);
+	mapIdSecond.put("userId", user.getUserId());
 	HashMap<String, Integer> rewardDisney = new HashMap<>();
 	rewardDisney.put("reward", 150);
 	HashMap<String, Integer> rewardJackson = new HashMap<>();
@@ -114,8 +123,8 @@ public class UserRewardsServiceTest {
 	HashMap<String, Integer> result = new HashMap<>();
 	//WHEN
 	when(gpsUtilProxy.getAllAttractions()).thenReturn(list);
-	when(rewardCentralProxy.getRewardPoints(feignReward)).thenReturn(rewardDisney);
-	when(rewardCentralProxy.getRewardPoints(feignReward2)).thenReturn(rewardJackson);
+	when(rewardCentralProxy.getRewardPoints(mapId)).thenReturn(rewardDisney);
+	when(rewardCentralProxy.getRewardPoints(mapIdSecond)).thenReturn(rewardJackson);
 	result = userRewardsService.calculReward("internalUser1");
 	//THEN
 	assertEquals(result.isEmpty(), true);	

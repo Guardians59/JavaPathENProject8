@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import tourGuide.model.Attraction;
-import tourGuide.model.FeignRewardPointsModel;
 import tourGuide.model.Location;
 import tourGuide.model.User;
 import tourGuide.model.UserReward;
@@ -72,16 +71,20 @@ public class UserRewardControllerTest {
 	list.add(new Attraction(idMojave, "Mojave National Preserve", "Kelso", "CA", 35.141689D, -115.510399D));
 	list.add(new Attraction(idJoshua, "Joshua Tree National Park", "Joshua Tree National Park", "CA", 33.881866D,
 		-115.90065D));
-	FeignRewardPointsModel feignReward = new FeignRewardPointsModel(idDisney, user.getUserId());
-	FeignRewardPointsModel feignReward2 = new FeignRewardPointsModel(idJackson, user.getUserId());
+	HashMap<String, Object> mapId = new HashMap<>();
+	mapId.put("attractionId", idDisney);
+	mapId.put("userId", user.getUserId());
+	HashMap<String, Object> mapIdSecond = new HashMap<>();
+	mapIdSecond.put("attractionId", idJackson);
+	mapIdSecond.put("userId", user.getUserId());
 	HashMap<String, Integer> rewardDisney = new HashMap<>();
 	rewardDisney.put("reward", 150);
 	HashMap<String, Integer> rewardJackson = new HashMap<>();
 	rewardJackson.put("reward", 50);
 	// WHEN
 	when(microServiceGPSUtilProxyMock.getAllAttractions()).thenReturn(list);
-	when(microServiceRewardCentralProxyMock.getRewardPoints(feignReward)).thenReturn(rewardDisney);
-	when(microServiceRewardCentralProxyMock.getRewardPoints(feignReward2)).thenReturn(rewardJackson);
+	when(microServiceRewardCentralProxyMock.getRewardPoints(mapId)).thenReturn(rewardDisney);
+	when(microServiceRewardCentralProxyMock.getRewardPoints(mapIdSecond)).thenReturn(rewardJackson);
 	// THEN
 	mockMvc.perform(
 		MockMvcRequestBuilders.get("/calculateRewardPoint/internalUser10")
@@ -121,16 +124,20 @@ public class UserRewardControllerTest {
 	List<Attraction> list = new ArrayList<>();
 	UUID idDisney = UUID.randomUUID();
 	UUID idJackson = UUID.randomUUID();
-	FeignRewardPointsModel feignReward = new FeignRewardPointsModel(idDisney, user.getUserId());
-	FeignRewardPointsModel feignReward2 = new FeignRewardPointsModel(idJackson, user.getUserId());
+	HashMap<String, Object> mapId = new HashMap<>();
+	mapId.put("attractionId", idDisney);
+	mapId.put("userId", user.getUserId());
+	HashMap<String, Object> mapIdSecond = new HashMap<>();
+	mapIdSecond.put("attractionId", idJackson);
+	mapIdSecond.put("userId", user.getUserId());
 	HashMap<String, Integer> rewardDisney = new HashMap<>();
 	rewardDisney.put("reward", 150);
 	HashMap<String, Integer> rewardJackson = new HashMap<>();
 	rewardJackson.put("reward", 50);
 	//WHEN
 	when(microServiceGPSUtilProxyMock.getAllAttractions()).thenReturn(list);
-	when(microServiceRewardCentralProxyMock.getRewardPoints(feignReward)).thenReturn(rewardDisney);
-	when(microServiceRewardCentralProxyMock.getRewardPoints(feignReward2)).thenReturn(rewardJackson);
+	when(microServiceRewardCentralProxyMock.getRewardPoints(mapId)).thenReturn(rewardDisney);
+	when(microServiceRewardCentralProxyMock.getRewardPoints(mapIdSecond)).thenReturn(rewardJackson);
 	//THEN
 	mockMvc.perform(
 		MockMvcRequestBuilders.get("/calculateRewardPoint/internalUser20")

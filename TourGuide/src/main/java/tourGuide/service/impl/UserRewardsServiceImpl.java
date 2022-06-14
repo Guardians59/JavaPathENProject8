@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tourGuide.model.Attraction;
-import tourGuide.model.FeignRewardPointsModel;
 import tourGuide.model.User;
 import tourGuide.model.UserReward;
 import tourGuide.model.VisitedLocation;
@@ -56,9 +55,10 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
 				.count() == 0) {
 			    
 			    if(distanceCalculService.nearAttraction(userLocation, attraction)) {
-				FeignRewardPointsModel rewardPointsModel = new FeignRewardPointsModel(attraction.getAttractionId(), user.getUserId());
-				HashMap<String, Integer> rewardCentralProxyResult = rewardCentralProxy.getRewardPoints(rewardPointsModel);
-				System.out.println(rewardCentralProxyResult);
+				HashMap<String, Object> mapId = new HashMap<>();
+				mapId.put("attractionId", attraction.getAttractionId());
+				mapId.put("userId", user.getUserId());
+				HashMap<String, Integer> rewardCentralProxyResult = rewardCentralProxy.getRewardPoints(mapId);
 				int rewardPoint = rewardCentralProxyResult.get("reward").intValue();
 				user.addUserReward(new UserReward(userLocation, attraction, rewardPoint));
 				result.put(attraction.attractionName, rewardPoint);
