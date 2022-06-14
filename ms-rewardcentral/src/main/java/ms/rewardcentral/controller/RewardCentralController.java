@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ms.rewardcentral.controller.exception.RewardException;
-import ms.rewardcentral.model.FeignRewardPointsModel;
 import ms.rewardcentral.service.IRewardCentralService;
 
 @RestController
@@ -31,12 +30,15 @@ public class RewardCentralController {
     }
     
     @PostMapping("/getRewardPoints")
-    public HashMap<String, Integer> getRewardPointsProxy(@RequestBody FeignRewardPointsModel feignRewardPointsModel) {
+    public HashMap<String, Integer> getRewardPointsProxy(@RequestBody HashMap<String, Object> mapId) {
 	HashMap<String, Integer> result = new HashMap<>();
-	result = rewardCentralService.getRewardPoints(feignRewardPointsModel.getAttractionId(), feignRewardPointsModel.getUserId());
+	UUID attractionId = (UUID) mapId.get("attractionId");
+	UUID userId = (UUID) mapId.get("userId");
+	result = rewardCentralService.getRewardPoints(attractionId, userId);
 	if(!result.containsKey("reward")) {
 	    throw new RewardException("An error occurred while searching for if reward available");
 	}
+	
 	return result;
     }
     
