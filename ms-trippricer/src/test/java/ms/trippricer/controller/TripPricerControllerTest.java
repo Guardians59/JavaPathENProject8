@@ -21,8 +21,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import ms.trippricer.model.Provider;
 import ms.trippricer.service.ITripPricerService;
-import tripPricer.Provider;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc

@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import ms.trippricer.model.Provider;
 import ms.trippricer.service.ITripPricerService;
-import tripPricer.Provider;
 import tripPricer.TripPricer;
 
 @Service
@@ -24,8 +24,16 @@ public class TripPricerServiceImpl implements ITripPricerService {
 	List<Provider> providers = new ArrayList<>();
 	logger.debug("Search price of providers");
 	if(idUser != null && numberOfAdult > 0 && duration > 0) {
-	    providers = tripPricer.getPrice(tripPricerApiKey, idUser, numberOfAdult, numberOfChildren, duration,
-		    cumulRewardPoints);
+	    
+	    tripPricer.getPrice(tripPricerApiKey, idUser, numberOfAdult, numberOfChildren, duration,
+		    cumulRewardPoints).forEach(listProvider -> {
+			Provider provider = new Provider();
+			provider.setName(listProvider.name);
+			provider.setPrice(listProvider.price);
+			provider.setTripId(listProvider.tripId);
+			providers.add(provider);
+		    });
+	    
 	    if(!providers.isEmpty()) {
 		logger.info("Price of providers available");
 	    } else {

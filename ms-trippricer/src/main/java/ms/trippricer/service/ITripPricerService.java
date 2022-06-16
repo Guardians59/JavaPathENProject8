@@ -3,7 +3,7 @@ package ms.trippricer.service;
 import java.util.List;
 import java.util.UUID;
 
-import tripPricer.Provider;
+import ms.trippricer.model.Provider;
 
 public interface ITripPricerService {
 

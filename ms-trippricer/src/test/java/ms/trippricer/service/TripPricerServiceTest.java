@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
-import tripPricer.Provider;
+import ms.trippricer.model.Provider;
 
 @SpringBootTest
 public class TripPricerServiceTest {
@@ -27,6 +26,8 @@ public class TripPricerServiceTest {
 	//WHEN
 	list = tripPricerService.getTripDeals(UUID.randomUUID(), 2, 1, 2, 200, tripPricerApiKey);
 	//THEN
+	System.out.println(list.get(0).toString());
+	System.out.println(list.get(1).toString());
 	assertEquals(list.isEmpty(), false);
 	
     }
