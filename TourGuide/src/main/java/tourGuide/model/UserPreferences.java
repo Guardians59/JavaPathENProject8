@@ -5,7 +5,6 @@ import javax.money.Monetary;
 
 import org.javamoney.moneta.Money;
 
-
 public class UserPreferences {
 	
 	private int attractionProximity = Integer.MAX_VALUE;
@@ -20,12 +19,32 @@ public class UserPreferences {
 	public UserPreferences() {
 	}
 	
+	public UserPreferences(int attractionProximity, CurrencyUnit currency, Money lowerPricePoint,
+		Money highPricePoint, int tripDuration, int ticketQuantity, int numberOfAdults, int numberOfChildren) {
+	    this.attractionProximity = attractionProximity;
+	    this.currency = currency;
+	    this.lowerPricePoint = lowerPricePoint;
+	    this.highPricePoint = highPricePoint;
+	    this.tripDuration = tripDuration;
+	    this.ticketQuantity = ticketQuantity;
+	    this.numberOfAdults = numberOfAdults;
+	    this.numberOfChildren = numberOfChildren;
+	}
+
 	public void setAttractionProximity(int attractionProximity) {
 		this.attractionProximity = attractionProximity;
 	}
 	
 	public int getAttractionProximity() {
 		return attractionProximity;
+	}
+	
+	public CurrencyUnit getCurrency() {
+	    return currency;
+	}
+
+	public void setCurrency(CurrencyUnit currency) {
+	    this.currency = currency;
 	}
 	
 	public Money getLowerPricePoint() {
@@ -74,6 +93,14 @@ public class UserPreferences {
 
 	public void setNumberOfChildren(int numberOfChildren) {
 		this.numberOfChildren = numberOfChildren;
+	}
+
+	@Override
+	public String toString() {
+	    return "UserPreferences [attractionProximity=" + attractionProximity + ", currency=" + currency
+		    + ", lowerPricePoint=" + lowerPricePoint + ", highPricePoint=" + highPricePoint + ", tripDuration="
+		    + tripDuration + ", ticketQuantity=" + ticketQuantity + ", numberOfAdults=" + numberOfAdults
+		    + ", numberOfChildren=" + numberOfChildren + "]";
 	}
 
 }
