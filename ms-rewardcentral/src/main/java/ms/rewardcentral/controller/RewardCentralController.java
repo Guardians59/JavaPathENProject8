@@ -1,6 +1,7 @@
 package ms.rewardcentral.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ms.rewardcentral.controller.exception.RewardException;
+import ms.rewardcentral.model.Attraction;
+import ms.rewardcentral.model.User;
 import ms.rewardcentral.service.IRewardCentralService;
 
 @RestController
@@ -38,6 +41,14 @@ public class RewardCentralController {
 	if(!result.containsKey("reward")) {
 	    throw new RewardException("An error occurred while searching for if reward available");
 	}
+	
+	return result;
+    }
+    
+    @GetMapping("/calculateReward")
+    public HashMap<String, Integer> calculateReward(@RequestParam List<Attraction> attractions, @RequestParam User user) {
+	HashMap<String, Integer> result = new HashMap<>();
+	result = rewardCentralService.calculateReward(attractions, user);
 	
 	return result;
     }
