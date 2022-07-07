@@ -1,7 +1,7 @@
 package ms.rewardcentral.model;
 
 import java.util.List;
-
+/*
 public class CalculateAllRewardModel {
     
     public List<Attraction> attractions;
@@ -32,4 +32,4 @@ public class CalculateAllRewardModel {
 	return "CalculateAllRewardModel [attractions=" + attractions + ", users=" + users + "]";
     }
     
-}
+}*/

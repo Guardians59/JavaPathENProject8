@@ -1,7 +1,7 @@
 package ms.rewardcentral.model;
 
 import java.util.List;
-
+/*
 public class CalculateRewardModel {
     
     public List<Attraction> attractions;
@@ -37,4 +37,4 @@ public class CalculateRewardModel {
 	return "CalculateRewardModel [attractions=" + attractions + ", user=" + user + "]";
     }
 
-}
+}*/

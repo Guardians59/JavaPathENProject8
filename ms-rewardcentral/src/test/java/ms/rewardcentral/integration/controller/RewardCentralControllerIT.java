@@ -3,9 +3,6 @@ package ms.rewardcentral.integration.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,14 +17,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.google.gson.Gson;
-
-import ms.rewardcentral.model.Attraction;
-import ms.rewardcentral.model.CalculateAllRewardModel;
-import ms.rewardcentral.model.CalculateRewardModel;
-import ms.rewardcentral.model.Location;
-import ms.rewardcentral.model.User;
-import ms.rewardcentral.model.VisitedLocation;
 import ms.rewardcentral.service.IRewardCentralService;
 
 @SpringBootTest
@@ -60,7 +49,7 @@ public class RewardCentralControllerIT {
 		.andExpect(status().isOk());
     }
 
-    @Test
+    /*@Test
     public void calculateRewardIT() throws Exception {
 	// GIVEN
 	User user = new User(UUID.randomUUID(), "jon");
@@ -137,6 +126,6 @@ public class RewardCentralControllerIT {
 		.andExpect(jsonPath("$.eddy").exists())
 		.andExpect(status().isOk());
 
-    }
+    }*/
 
 }

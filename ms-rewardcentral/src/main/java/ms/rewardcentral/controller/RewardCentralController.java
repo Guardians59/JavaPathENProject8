@@ -1,8 +1,6 @@
 package ms.rewardcentral.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ms.rewardcentral.controller.exception.RewardException;
-import ms.rewardcentral.model.Attraction;
-import ms.rewardcentral.model.CalculateAllRewardModel;
-import ms.rewardcentral.model.CalculateRewardModel;
-import ms.rewardcentral.model.User;
 import ms.rewardcentral.service.IRewardCentralService;
 
 @RestController
@@ -49,7 +43,7 @@ public class RewardCentralController {
     }
     
     
-    @PostMapping(value = "/calculateReward", consumes = "application/json")
+    /*@PostMapping(value = "/calculateReward", consumes = "application/json")
     public HashMap<String, Object> calculateReward(@RequestBody CalculateRewardModel model) {
 	HashMap<String, Object> result = new HashMap<>();
 	List<Attraction> list = new ArrayList<>();
@@ -73,6 +67,6 @@ public class RewardCentralController {
 	result = rewardCentralService.calculateAllRewardsOfUsers(list, listUser);
 	
 	return result;
-    }
+    }*/
     
 }

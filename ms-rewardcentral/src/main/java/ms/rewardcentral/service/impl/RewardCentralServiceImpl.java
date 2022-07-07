@@ -46,7 +46,7 @@ public class RewardCentralServiceImpl implements IRewardCentralService {
 	return map;
     }
 
-    @Override
+    /*@Override
     public HashMap<String, Object> calculateReward(List<Attraction> attractions, User user) {
 	HashMap<String, Object> result = new HashMap<>();
 	logger.debug("Verification of user rewards");
@@ -111,7 +111,8 @@ public class RewardCentralServiceImpl implements IRewardCentralService {
 					HashMap<String, Integer> rewardPointResult = getRewardPoints(
 						attraction.getAttractionId(), user.getUserId());
 					int rewardPoint = rewardPointResult.get("reward").intValue();
-					user.addUserReward(new UserReward(userLocation, attraction, rewardPoint));
+					UserReward userReward = new UserReward(userLocation, attraction, rewardPoint);
+					user.addUserReward(userReward);
 					rewardResult.put(attraction.attractionName, rewardPoint);
 					logger.info("The reward is valid for attraction " + attraction.attractionName);
 				    } else {
@@ -137,6 +138,6 @@ public class RewardCentralServiceImpl implements IRewardCentralService {
 	    logger.error("An error has occured, the list of users is empty");
 	}
 	return result;
-    }
+    }*/
 
 }
