@@ -47,7 +47,7 @@ public class RewardCentralServiceTest {
     @Test
     public void calculateRewardTest() {
 	//GIVEN
-	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+	User user = new User(UUID.randomUUID(), "jon");
 	VisitedLocation visitedLocation = new VisitedLocation();
 	Location location = new Location(34.817595D, -120.922008D);
 	visitedLocation.setLocation(location);
@@ -60,12 +60,11 @@ public class RewardCentralServiceTest {
 	list.add(new Attraction(idDisney, "Disneyland", "Anaheim", "CA", 34.817595D, -120.922009D));
 	list.add(new Attraction(idJackson, "Jackson Hole", "Jackson Hole", "WY", 34.817590D, -120.922009D));
 	list.add(new Attraction(idMojave,"Mojave National Preserve", "Kelso", "CA", 35.141689D, -115.510399D));
-	HashMap<String, Integer> result = new HashMap<>();
+	HashMap<String, Object> result = new HashMap<>();
 	//WHEN
 	result = rewardCentralService.calculateReward(list, user);
 	//THEN
 	assertEquals(result.isEmpty(), false);
-	assertEquals(result.size(), 2);
     }
     
     @Test
@@ -84,7 +83,7 @@ public class RewardCentralServiceTest {
 	list.add(new Attraction(idDisney, "Disneyland", "Anaheim", "CA", 34.817595D, -120.922009D));
 	list.add(new Attraction(idJackson, "Jackson Hole", "Jackson Hole", "WY", 34.817590D, -120.922009D));
 	list.add(new Attraction(idMojave,"Mojave National Preserve", "Kelso", "CA", 35.141689D, -115.510399D));
-	HashMap<String, Integer> result = new HashMap<>();
+	HashMap<String, Object> result = new HashMap<>();
 	//WHEN
 	result = rewardCentralService.calculateReward(list, user);
 	//THEN
@@ -94,7 +93,7 @@ public class RewardCentralServiceTest {
     @Test
     public void calculateRewardErrorLocationTest() {
 	//GIVEN
-	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+	User user = new User(UUID.randomUUID(), "jon");
 	List<Attraction> list = new ArrayList<>();
 	UUID idDisney = UUID.randomUUID();
 	UUID idJackson = UUID.randomUUID();
@@ -102,7 +101,7 @@ public class RewardCentralServiceTest {
 	list.add(new Attraction(idDisney, "Disneyland", "Anaheim", "CA", 34.817595D, -120.922009D));
 	list.add(new Attraction(idJackson, "Jackson Hole", "Jackson Hole", "WY", 34.817590D, -120.922009D));
 	list.add(new Attraction(idMojave,"Mojave National Preserve", "Kelso", "CA", 35.141689D, -115.510399D));
-	HashMap<String, Integer> result = new HashMap<>();
+	HashMap<String, Object> result = new HashMap<>();
 	//WHEN
 	result = rewardCentralService.calculateReward(list, user);
 	//THEN
@@ -112,14 +111,14 @@ public class RewardCentralServiceTest {
     @Test
     public void calculateRewardErrorListAttractionTest() {
 	//GIVEN
-	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+	User user = new User(UUID.randomUUID(), "jon");
 	VisitedLocation visitedLocation = new VisitedLocation();
 	Location location = new Location(34.817595D, -120.922008D);
 	visitedLocation.setLocation(location);
 	visitedLocation.setUserId(user.getUserId());
 	user.addToListVisitedLocations(visitedLocation);
 	List<Attraction> list = new ArrayList<>();
-	HashMap<String, Integer> result = new HashMap<>();
+	HashMap<String, Object> result = new HashMap<>();
 	//WHEN
 	result = rewardCentralService.calculateReward(list, user);
 	//THEN
@@ -129,11 +128,11 @@ public class RewardCentralServiceTest {
     @Test
     public void calculateAllRewardsOfUsersTest() {
 	//GIVEN
-	User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-	User user2 = new User(UUID.randomUUID(), "eddy", "001", "eddy@tourGuide.com");
+	User user = new User(UUID.randomUUID(), "jon");
+	User user2 = new User(UUID.randomUUID(), "eddy");
 	User user3 = new User();
-	User user4 = new User(UUID.randomUUID(), "jack", "003", "jack@tourGuide.com");
-	User user5 = new User(UUID.randomUUID(), "tom", "003", "tom@tourGuide.com");
+	User user4 = new User(UUID.randomUUID(), "jack");
+	User user5 = new User(UUID.randomUUID(), "tom");
 	VisitedLocation visitedLocation = new VisitedLocation();
 	Location location = new Location(34.817595D, -120.922008D);
 	visitedLocation.setLocation(location);

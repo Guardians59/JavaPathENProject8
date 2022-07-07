@@ -4,7 +4,7 @@ public class UserReward {
 
     public VisitedLocation visitedLocation;
     public Attraction attraction;
-    private int rewardPoints;
+    public int rewardPoints;
 
     public UserReward(VisitedLocation visitedLocation, Attraction attraction, int rewardPoints) {
 	this.visitedLocation = visitedLocation;

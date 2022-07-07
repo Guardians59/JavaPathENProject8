@@ -1,5 +1,6 @@
 package ms.rewardcentral.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ms.rewardcentral.controller.exception.RewardException;
 import ms.rewardcentral.model.Attraction;
+import ms.rewardcentral.model.CalculateAllRewardModel;
+import ms.rewardcentral.model.CalculateRewardModel;
 import ms.rewardcentral.model.User;
 import ms.rewardcentral.service.IRewardCentralService;
 
@@ -45,10 +48,29 @@ public class RewardCentralController {
 	return result;
     }
     
-    @GetMapping("/calculateReward")
-    public HashMap<String, Integer> calculateReward(@RequestParam List<Attraction> attractions, @RequestParam User user) {
-	HashMap<String, Integer> result = new HashMap<>();
-	result = rewardCentralService.calculateReward(attractions, user);
+    
+    @PostMapping(value = "/calculateReward", consumes = "application/json")
+    public HashMap<String, Object> calculateReward(@RequestBody CalculateRewardModel model) {
+	HashMap<String, Object> result = new HashMap<>();
+	List<Attraction> list = new ArrayList<>();
+	list = model.getAttractions();
+	User user = new User();
+	user = model.getUser();
+	result = rewardCentralService.calculateReward(list, user);
+	if(result.isEmpty()) {
+	    throw new RewardException("An error occurred while searching for if reward available");
+	}
+	return result;
+    }
+    
+    @PostMapping(value = "/calculateAllReward", consumes = "application/json")
+    public HashMap<String, Object> calculateAllReward(@RequestBody CalculateAllRewardModel model) {
+	HashMap<String, Object> result = new HashMap<>();
+	List<Attraction> list = new ArrayList<>();
+	list.addAll(model.attractions);
+	List<User> listUser = new ArrayList<>();
+	listUser.addAll(model.users);
+	result = rewardCentralService.calculateAllRewardsOfUsers(list, listUser);
 	
 	return result;
     }

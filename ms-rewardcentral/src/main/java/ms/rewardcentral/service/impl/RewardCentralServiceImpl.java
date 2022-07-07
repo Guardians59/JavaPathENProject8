@@ -47,8 +47,8 @@ public class RewardCentralServiceImpl implements IRewardCentralService {
     }
 
     @Override
-    public HashMap<String, Integer> calculateReward(List<Attraction> attractions, User user) {
-	HashMap<String, Integer> result = new HashMap<>();
+    public HashMap<String, Object> calculateReward(List<Attraction> attractions, User user) {
+	HashMap<String, Object> result = new HashMap<>();
 	logger.debug("Verification of user rewards");
 	
 	if(user.getUserName() != null) {
@@ -66,8 +66,8 @@ public class RewardCentralServiceImpl implements IRewardCentralService {
 				HashMap<String, Integer> rewardPointResult = getRewardPoints(
 					attraction.getAttractionId(), user.getUserId());
 				int rewardPoint = rewardPointResult.get("reward").intValue();
-				user.addUserReward(new UserReward(userLocation, attraction, rewardPoint));
-				result.put(attraction.attractionName, rewardPoint);
+				UserReward userReward = new UserReward(userLocation, attraction, rewardPoint);
+				user.addUserReward(userReward);
 				logger.info("The reward is valid");
 			    } else {
 				logger.info("The attraction is too far");
@@ -78,6 +78,7 @@ public class RewardCentralServiceImpl implements IRewardCentralService {
 
 		    });
 		});
+		result.put(user.getUserName(), user.getUserRewards());
 	    } else {
 		logger.error("An error has occurred, the list of attractions or locations is empty");
 	    }
@@ -126,7 +127,7 @@ public class RewardCentralServiceImpl implements IRewardCentralService {
 		    } else {
 			logger.error("An error has occurred, the list of attractions is empty");
 		    } if (!rewardResult.isEmpty()) {
-		    result.put(user.getUserName(), rewardResult);
+		    result.put(user.getUserName(), user.getUserRewards());
 		    }
 		} else {
 		    logger.error("An error has occurred, the user is unknown");
