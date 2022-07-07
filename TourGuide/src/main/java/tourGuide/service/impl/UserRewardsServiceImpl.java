@@ -25,43 +25,42 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
 
     @Autowired
     UserRepository userRepository;
-    
+
     private final IMicroServiceRewardCentralProxy rewardCentralProxy;
     private final IMicroServiceGPSUtilProxy gpsUtilProxy;
     private Logger logger = LoggerFactory.getLogger(UserRewardsServiceImpl.class);
-    
-    public UserRewardsServiceImpl(IMicroServiceRewardCentralProxy rewardCentralProxy, IMicroServiceGPSUtilProxy gpsUtilProxy) {
+
+    public UserRewardsServiceImpl(IMicroServiceRewardCentralProxy rewardCentralProxy,
+	    IMicroServiceGPSUtilProxy gpsUtilProxy) {
 	this.rewardCentralProxy = rewardCentralProxy;
 	this.gpsUtilProxy = gpsUtilProxy;
     }
 
     @Override
-    public HashMap<String, Integer> calculReward(String userName) {
+    public HashMap<String, Object> calculReward(String userName) {
 	User user = userRepository.getUser(userName);
 	List<Attraction> attractions = gpsUtilProxy.getAllAttractions();
-	HashMap<String, Integer> result = new HashMap<>();
+	HashMap<String, Object> result = new HashMap<>();
 	logger.debug("Verification of user rewards");
 
 	if(user != null) {
 	    List<VisitedLocation> userLocations = user.getListVisitedLocations();
 	    
-	    if(!attractions.isEmpty()) {
-		
+	    if(!attractions.isEmpty() && !userLocations.isEmpty()) {
 		userLocations.forEach(userLocation -> {
 		    attractions.forEach(attraction -> {
 			
-			if(user.getUserRewards().isEmpty() || user.getUserRewards().stream()
-				.filter(r -> r.attraction.attractionName.equals(attraction.attractionName))
-				.count() == 0) {
-			    
+			if(user.getUserRewards().isEmpty() || user.getUserRewards().stream().filter
+				(r -> r.attraction.getAttractionName().equals(attraction.getAttractionName())).count() == 0) {
+
 			    if(distanceCalculService.nearAttraction(userLocation, attraction)) {
 				HashMap<String, Object> mapId = new HashMap<>();
 				mapId.put("attractionId", attraction.getAttractionId());
 				mapId.put("userId", user.getUserId());
-				HashMap<String, Integer> rewardCentralProxyResult = rewardCentralProxy.getRewardPoints(mapId);
+				HashMap<String, Integer> rewardCentralProxyResult = rewardCentralProxy
+					.getRewardPoints(mapId);
 				int rewardPoint = rewardCentralProxyResult.get("reward").intValue();
 				user.addUserReward(new UserReward(userLocation, attraction, rewardPoint));
-				result.put(attraction.attractionName, rewardPoint);
 				logger.info("The reward is valid");
 			    } else {
 				logger.info("The attraction is too far");
@@ -69,15 +68,73 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
 			} else {
 			    logger.info("A reward is already saved with these attraction");
 			}
+			
 		    });
 		});
+		result.put(user.getUserName(), user.getUserRewards());
 	    } else {
-		logger.error("An error has occurred, the list of attractions is empty");
+		logger.error("An error has occurred, the list of attractions or locations is empty");
 	    }
 	} else {
 	    logger.error("An error has occurred, the user is unknown");
 	}
 	return result;
+    }
+
+    @Override
+    public HashMap<String, Object> calculateAllRewardsOfUsers() {
+	HashMap<String, Object> result = new HashMap<>();
+	List<User> users = userRepository.getAllUsers();
+	List<Attraction> attractions = gpsUtilProxy.getAllAttractions();
+	logger.debug("Verification of all users rewards");
+
+	if(!users.isEmpty() && !attractions.isEmpty()) {
+	    users.forEach(user -> {
+		HashMap<String, Integer> rewardResult = new HashMap<>();
+		List<VisitedLocation> userLocations = user.getListVisitedLocations();
+
+		    if(!userLocations.isEmpty()) {
+			userLocations.forEach(location -> {
+			    attractions.forEach(attraction -> {
+
+				if(user.getUserRewards().isEmpty() || user.getUserRewards().stream()
+					.filter(r -> r.attraction.getAttractionName().equals(attraction.getAttractionName()))
+					.count() == 0) {
+				    if(distanceCalculService.nearAttraction(location, attraction)) {
+					HashMap<String, Object> mapId = new HashMap<>();
+					mapId.put("attractionId", attraction.getAttractionId());
+					mapId.put("userId", user.getUserId());
+					HashMap<String, Integer> rewardCentralProxyResult = rewardCentralProxy
+						.getRewardPoints(mapId);
+					int rewardPoint = rewardCentralProxyResult.get("reward").intValue();
+					UserReward userReward = new UserReward(location, attraction, rewardPoint);
+					user.addUserReward(userReward);
+					rewardResult.put(attraction.attractionName, rewardPoint);
+					logger.info("The reward is valid for attraction " + attraction.attractionName);
+				    } else {
+					logger.info("The attraction " + attraction.attractionName
+						+ " is too far for user " + user.getUserName());
+				    }
+				} else {
+				    logger.info("A reward is already saved with these attraction");
+				}
+
+			    });
+			});
+
+		    } else {
+			logger.error("An error has occurred, the list of locations is empty for user " + user.getUserName());
+		    }
+		    if(!rewardResult.isEmpty()) {
+			result.put(user.getUserName(), user.getUserRewards());
+		    }
+		
+	    });
+	} else {
+	    logger.error("An error has occured, the list of users or attractions is empty");
+	}
+	return result;
+
     }
 
     @Override

@@ -2,8 +2,8 @@ package tourGuide.model;
 
 public class UserReward {
 
-	public final VisitedLocation visitedLocation;
-	public final Attraction attraction;
+	public VisitedLocation visitedLocation;
+	public Attraction attraction;
 	private int rewardPoints;
 	public UserReward(VisitedLocation visitedLocation, Attraction attraction, int rewardPoints) {
 		this.visitedLocation = visitedLocation;
@@ -22,6 +22,12 @@ public class UserReward {
 	
 	public int getRewardPoints() {
 		return rewardPoints;
+	}
+
+	@Override
+	public String toString() {
+	    return "UserReward [visitedLocation=" + visitedLocation + ", attraction=" + attraction + ", rewardPoints="
+		    + rewardPoints + "]";
 	}
 	
 }

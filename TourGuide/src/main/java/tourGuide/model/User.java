@@ -102,4 +102,12 @@ public class User {
 		return tripDeals;
 	}
 
+	@Override
+	public String toString() {
+	    return "User [userId=" + userId + ", userName=" + userName + ", phoneNumber=" + phoneNumber
+		    + ", emailAddress=" + emailAddress + ", latestLocationTimestamp=" + latestLocationTimestamp
+		    + ", listVisitedLocations=" + listVisitedLocations + ", userRewards=" + userRewards
+		    + ", userPreferences=" + userPreferences + ", tripDeals=" + tripDeals + "]";
+	}
+
 }

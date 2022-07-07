@@ -18,12 +18,23 @@ public class UserRewardController {
     IUserRewardsService userRewardsService;
     
     @GetMapping("calculateRewardPoint/{userName}")
-    public HashMap<String, Integer> calculateRewardPoint(@PathVariable String userName) {
-	HashMap<String, Integer> result = new HashMap<>();
+    public HashMap<String, Object> calculateRewardPoint(@PathVariable String userName) {
+	HashMap<String, Object> result = new HashMap<>();
 	result = userRewardsService.calculReward(userName);
 	if(result.isEmpty())
 	    throw new CalculateRewardPointError(
 		    "An error occured while calculation of reward points to the user " + userName);
+	
+	return result;
+    }
+    
+    @GetMapping("calculateAllRewardsPointOfUsers")
+    public HashMap<String, Object> calculateAllRewardPoint() {
+	HashMap<String, Object> result = new HashMap<>();
+	result = userRewardsService.calculateAllRewardsOfUsers();
+	if(result.isEmpty())
+	    throw new CalculateRewardPointError(
+		    "An error occured while calculation of reward points to the users ");
 	
 	return result;
     }
