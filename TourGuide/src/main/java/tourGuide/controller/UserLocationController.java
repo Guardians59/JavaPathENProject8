@@ -43,10 +43,21 @@ public class UserLocationController {
 	return result;
     }
     
-    @GetMapping("getAllCurrentLocations/{userNames}")
-    public HashMap<Object, Object> getAllCurrentUsersLocations(@PathVariable List<String> userNames) {
+    @GetMapping("getCurrentLocationsOfUsers/{userNames}")
+    public HashMap<Object, Object> getCurrentLocationsOfUsers(@PathVariable List<String> userNames) {
 	HashMap<Object, Object> result = new HashMap<>();
-	result = userLocationService.getAllCurrentLocation(userNames);
+	result = userLocationService.getCurrentLocationOfUsers(userNames);
+	if(result.isEmpty())
+	    throw new AllCurrentUsersLocationsIsEmpty(
+		    "An error occurred while searching for the current locations of the users");
+	
+	return result;
+    }
+    
+    @GetMapping("getAllCurrentLocations")
+    public HashMap<Object, Object> getAllCurrentLocations() {
+	HashMap<Object, Object> result = new HashMap<>();
+	result = userLocationService.getAllCurrentLocations();
 	if(result.isEmpty())
 	    throw new AllCurrentUsersLocationsIsEmpty(
 		    "An error occurred while searching for the current locations of the users");

@@ -51,7 +51,7 @@ public class UserLocationServiceTest {
     }
     
     @Test
-    public void getAllCurrentUserLocationTest() {
+    public void getCurrentLocationsOfUsersTest() {
 	//GIVEN
 	HashMap<Object, Object> result = new HashMap<>();
 	List<String> userNames = new ArrayList<>();
@@ -62,7 +62,7 @@ public class UserLocationServiceTest {
 	UUID id2 = userRepository.getUser("internalUser3").getUserId();
 	UUID id3 = userRepository.getUser("internalUser4").getUserId();
 	//WHEN
-	result = userLocationService.getAllCurrentLocation(userNames);
+	result = userLocationService.getCurrentLocationOfUsers(userNames);
 	//THEN
 	assertEquals(result.isEmpty(), false);
 	assertEquals(result.containsKey(id), true);
@@ -71,7 +71,7 @@ public class UserLocationServiceTest {
     }
     
     @Test
-    public void getAllCurrentUserLocationOneUserValidTest() {
+    public void getCurrentLocationsOfUsersOneUserValidTest() {
 	//GIVEN
 	HashMap<Object, Object> result = new HashMap<>();
 	List<String> userNames = new ArrayList<>();
@@ -80,7 +80,7 @@ public class UserLocationServiceTest {
 	userNames.add("internalUser400");
 	UUID id = userRepository.getUser("internalUser2").getUserId();
 	//WHEN
-	result = userLocationService.getAllCurrentLocation(userNames);
+	result = userLocationService.getCurrentLocationOfUsers(userNames);
 	//THEN
 	assertEquals(result.isEmpty(), false);
 	assertEquals(result.containsKey(id), true);
@@ -88,16 +88,32 @@ public class UserLocationServiceTest {
     }
     
     @Test
-    public void getAllCurrentUserLocationErrorTest() {
+    public void getCurrentLocationsOfUsersErrorTest() {
 	//GIVEN
 	HashMap<Object, Object> result = new HashMap<>();
 	List<String> userNames = new ArrayList<>();
 	userNames.add("internalUser200");
 	userNames.add("internalUser300");
 	//WHEN
-	result = userLocationService.getAllCurrentLocation(userNames);
+	result = userLocationService.getCurrentLocationOfUsers(userNames);
 	//THEN
 	assertEquals(result.isEmpty(), true);
+    }
+    
+    @Test
+    public void getAllCurrentLocationsTest() {
+	//GIVEN
+	HashMap<Object, Object> result = new HashMap<>();
+	UUID id = userRepository.getUser("internalUser60").getUserId();
+	UUID id2 = userRepository.getUser("internalUser61").getUserId();
+	UUID id3 = userRepository.getUser("internalUser40").getUserId();
+	//WHEN
+	result = userLocationService.getAllCurrentLocations();
+	//THEN
+	assertEquals(result.isEmpty(), false);
+	assertEquals(result.containsKey(id), true);
+	assertEquals(result.containsKey(id2), true);
+	assertEquals(result.containsKey(id3), true);
     }
     
     @Test

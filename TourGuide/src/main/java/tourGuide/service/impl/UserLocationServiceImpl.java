@@ -36,6 +36,7 @@ public class UserLocationServiceImpl implements IUserLocationService {
 	logger.debug("Search the last current location");
 	
 	if(user != null) {
+	    if(!user.getListVisitedLocations().isEmpty()) {
 	int size = user.getListVisitedLocations().size();
 	int lastVisited = size - 1;
 	Double longitude = user.getListVisitedLocations().get(lastVisited).location.longitude;
@@ -43,6 +44,9 @@ public class UserLocationServiceImpl implements IUserLocationService {
 	Location location = new Location(latitude, longitude);
 	result.put(user.getUserId(), location);
 	logger.info("The last current location was successfully retrieved");
+	    } else {
+		logger.info("No location register for this user " + user.getUserName());
+	    }
 	} else {
 	    logger.error("An error occurred while finding the user's location for " + userName);
 	}
@@ -50,13 +54,44 @@ public class UserLocationServiceImpl implements IUserLocationService {
     }
 
     @Override
-    public HashMap<Object, Object> getAllCurrentLocation(List<String> userNames) {
+    public HashMap<Object, Object> getCurrentLocationOfUsers(List<String> userNames) {
 	HashMap<Object, Object> result = new HashMap<>();
 	logger.info("Find the last current location of each users");
 	userNames.forEach(userName -> {
 	    User user = new User();
 	    user = userRepository.getUser(userName);
 	    if(user != null) {
+		if(!user.getListVisitedLocations().isEmpty()) {
+		    
+		    int size = user.getListVisitedLocations().size();
+		    int lastVisited = size - 1;
+		    Double longitude = user.getListVisitedLocations().get(lastVisited).location.longitude;
+		    Double latitude = user.getListVisitedLocations().get(lastVisited).location.latitude;
+		    Location location = new Location(longitude, latitude);
+		    result.put(user.getUserId(), location);
+		} else {
+		    logger.info("No location register for this user " + user.getUserName());
+		}
+	    } else {
+		logger.error("An error occurred while finding the user " + userName);
+	    }
+	});
+	if(!result.isEmpty()) {
+	    logger.info("The location of the users has been successfully found");
+	} else {
+	    logger.info("No location found");
+	}
+	return result;
+    }
+    
+    @Override
+    public HashMap<Object, Object> getAllCurrentLocations() {
+	HashMap<Object, Object> result = new HashMap<>();
+	List<User> users = userRepository.getAllUsers();
+	logger.info("Find the last current location of each users");
+	users.forEach(user -> {
+	   
+	    if(!user.getListVisitedLocations().isEmpty()) {
 		int size = user.getListVisitedLocations().size();
 		int lastVisited = size - 1;
 		Double longitude = user.getListVisitedLocations().get(lastVisited).location.longitude;
@@ -64,7 +99,7 @@ public class UserLocationServiceImpl implements IUserLocationService {
 		Location location = new Location(longitude, latitude);
 		result.put(user.getUserId(), location);
 	    } else {
-		logger.error("An error occurred while finding the user's location for " + userName);
+		logger.info("No location register for this user " + user.getUserName());
 	    }
 	});
 	if(!result.isEmpty()) {

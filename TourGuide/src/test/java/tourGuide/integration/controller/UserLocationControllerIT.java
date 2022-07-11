@@ -61,12 +61,12 @@ public class UserLocationControllerIT {
     }
     
     @Test
-    public void getAllCurrentUsersLocationsIT() throws Exception {
+    public void getCurrentUsersLocationsIT() throws Exception {
 	String id = userRepository.getUser("internalUser1").getUserId().toString();
 	String id2 = userRepository.getUser("internalUser2").getUserId().toString();
 	
 	mockMvc.perform(
-		MockMvcRequestBuilders.get("/getAllCurrentLocations/internalUser1,internalUser2")
+		MockMvcRequestBuilders.get("/getCurrentLocationsOfUsers/internalUser1,internalUser2")
 			.accept(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$."+id).exists())
 			.andExpect(jsonPath("$."+id2).exists())
@@ -76,14 +76,28 @@ public class UserLocationControllerIT {
 }
     
     @Test
-    public void getAllCurrentUsersLocationsErrorIT() throws Exception {
+    public void getCurrentUsersLocationsErrorIT() throws Exception {
 	mockMvc.perform(
-		MockMvcRequestBuilders.get("/getAllCurrentLocations/internalUser101,internalUser200")
+		MockMvcRequestBuilders.get("/getCurrentLocationsOfUsers/internalUser101,internalUser200")
 			.accept(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$").doesNotExist())
 			.andExpect(status().isNotFound());
 
 }
+    
+    @Test
+    public void getAllCurrentLocationsIT() throws Exception {
+	String id = userRepository.getUser("internalUser1").getUserId().toString();
+	String id99 = userRepository.getUser("internalUser99").getUserId().toString();
+	
+	mockMvc.perform(
+		MockMvcRequestBuilders.get("/getAllCurrentLocations")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$."+id).exists())
+			.andExpect(jsonPath("$."+id99).exists())
+			.andExpect(status().isOk())
+			.andDo(MockMvcResultHandlers.print());
+    }
     
     @Test
     public void getUsersLocationsHistoricalIT() throws Exception {
