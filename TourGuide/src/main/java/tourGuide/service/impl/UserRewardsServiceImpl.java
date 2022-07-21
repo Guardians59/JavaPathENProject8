@@ -71,7 +71,9 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
 			
 		    });
 		});
+		if(!user.getUserRewards().isEmpty()) {
 		result.put(user.getUserName(), user.getUserRewards());
+		}
 	    } else {
 		logger.error("An error has occurred, the list of attractions or locations is empty");
 	    }
@@ -125,7 +127,7 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
 		    } else {
 			logger.error("An error has occurred, the list of locations is empty for user " + user.getUserName());
 		    }
-		    if(!rewardResult.isEmpty()) {
+		    if(!user.getUserRewards().isEmpty()) {
 			result.put(user.getUserName(), user.getUserRewards());
 		    }
 		

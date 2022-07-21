@@ -203,6 +203,7 @@ public class UserRewardsServiceTest {
 	when(rewardCentralProxy.getRewardPoints(mapIdSecond)).thenReturn(rewardJackson);
 	when(rewardCentralProxy.getRewardPoints(mapIdTree)).thenReturn(rewardMojave);
 	result = userRewardsService.calculateAllRewardsOfUsers();
+	System.out.println(result);
 	//THEN
 	assertEquals(result.containsKey("internalUser3"), true);
 	assertEquals(result.containsKey("internalUser4"), true);
