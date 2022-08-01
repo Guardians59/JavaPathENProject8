@@ -1,23 +1,32 @@
-version: "3"
+version: "3.9"
 
 services:
-  tourguide:
-    image: guardians59/tourguide-image
-    ports:
-     - 8080:8080
-
+  
   gpsutil:
     image: guardians59/ms-gpsutil-image
     ports:
      - 8081:8081
+    restart: always
+    networks:
+     - host
 
   rewardcentral:
     image: guardians59/ms-rewardcentral-image
     ports:
      - 8082:8082
+    restart: always
+    networks:
+     - host
 
   tripricer:
     image: guardians59/ms-trippricer-image
     ports:
      - 8083:8083
+    restart: always
+    networks:
+     - host
+
+networks:
+  host:
+    driver: bridge
 
