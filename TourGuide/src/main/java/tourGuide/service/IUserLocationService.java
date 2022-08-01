@@ -3,6 +3,7 @@ package tourGuide.service;
 import java.util.HashMap;
 import java.util.List;
 
+import tourGuide.model.User;
 import tourGuide.model.VisitedLocation;
 
 public interface IUserLocationService {
@@ -16,5 +17,7 @@ public interface IUserLocationService {
     public HashMap<String, Object> getUsersLocationsHistorical(List<String> userNames);
     
     public VisitedLocation getUserLocation(String userName);
+    
+    public HashMap<Object, Object> getAllLocationsThread();
 
 }

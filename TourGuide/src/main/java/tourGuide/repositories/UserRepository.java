@@ -27,5 +27,9 @@ public class UserRepository {
 	    db.internalUserMap.put(user.getUserName(), user);
 	}
     }
+    
+    public void deleteAllUsers() {
+	db.internalUserMap.clear();
+    }
 
 }

@@ -10,16 +10,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tourGuide.controller.exception.AllCurrentUsersLocationsIsEmpty;
 import tourGuide.controller.exception.CurrentUserLocationIsEmpty;
+import tourGuide.controller.exception.ThreadTimeOut;
 import tourGuide.controller.exception.UserLocationError;
 import tourGuide.controller.exception.UsersLocationsHistoricalIsEmpty;
 import tourGuide.model.VisitedLocation;
 import tourGuide.service.IUserLocationService;
+import tourGuide.service.impl.UserLocationServiceImpl;
 
 @RestController
 public class UserLocationController {
     
     @Autowired
     IUserLocationService userLocationService;
+    
+    @Autowired
+    UserLocationServiceImpl userLocationServiceImpl;
     
     @GetMapping("getLocation/{userName}")
     public VisitedLocation getUserLocation(@PathVariable String userName) {
@@ -74,6 +79,17 @@ public class UserLocationController {
 		    "An error occurred while searching for the historical locations of the users");
 	
 	return result;
+    }
+    
+   @GetMapping("getAllLocations")
+    public HashMap<Object, Object> getAllLocationsThread() {
+	HashMap<Object, Object> result = userLocationService.getAllLocationsThread();
+	if(!result.isEmpty()) {
+	    return result;
+	} else {
+	    throw new ThreadTimeOut("Thread execution timed out, more than 15 minutes of searching");
+	}
+	
     }
 
 }

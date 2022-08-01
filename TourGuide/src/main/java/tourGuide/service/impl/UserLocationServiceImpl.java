@@ -3,7 +3,10 @@ package tourGuide.service.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,6 +161,29 @@ public class UserLocationServiceImpl implements IUserLocationService {
 	    logger.error("An error has occured, user with username " + userName + " is not found");
 	}
 	return visitedLocation;
+    }
+
+    @Override
+    public HashMap<Object, Object> getAllLocationsThread() {
+	ExecutorService executor = Executors.newFixedThreadPool(1000);
+	HashMap<Object, Object> result = new HashMap<>();
+	List<User> users = userRepository.getAllUsers();
+	boolean threadStop = false;
+	
+	users.forEach(user -> {
+	    CompletableFuture.supplyAsync(() -> getUserLocation(user.getUserName()), executor);
+		     
+	});
+	try {
+		executor.shutdown();
+		threadStop = executor.awaitTermination(15, TimeUnit.MINUTES);
+	    } catch (Exception e) {
+		executor.shutdown();
+	    }
+	if(threadStop = true) {
+	    result = getAllCurrentLocations();
+	}
+	return result;
     }
 
 }

@@ -2,6 +2,11 @@ package tourGuide.service.impl;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,6 +160,36 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
 	    logger.error("An error has occurred, the user is unknown");
 	}
 	return resultPoints;
+    }
+    
+    @Override
+    public HashMap<String, Object> getAllRewards() {
+	HashMap<String, Object> result = new HashMap<>();
+	List<User> users = userRepository.getAllUsers();
+	users.forEach(user -> {
+	    result.put(user.getUserName(), user.getUserRewards());
+	});
+	return result;
+    }
+    
+    @Override
+    public HashMap<String, Object> calculateAllRewardsThread() {
+	HashMap<String, Object> result = new HashMap<>();
+	ExecutorService executor = Executors.newFixedThreadPool(1000);
+	boolean threadStop = false;
+	
+	CompletableFuture.supplyAsync(() -> calculateAllRewardsOfUsers() ,executor);
+	
+	try {
+		executor.shutdown();
+		threadStop = executor.awaitTermination(20, TimeUnit.MINUTES);
+	    } catch (Exception e) {
+		executor.shutdown();
+	    }
+	if(threadStop = true) {
+	    result = getAllRewards();
+	}
+	return result;
     }
 
 }

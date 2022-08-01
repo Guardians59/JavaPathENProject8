@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tourGuide.controller.exception.CalculateRewardPointError;
 import tourGuide.controller.exception.CumulativeRewardPointError;
+import tourGuide.controller.exception.ThreadTimeOut;
 import tourGuide.service.IUserRewardsService;
 
 @RestController
@@ -48,6 +49,17 @@ public class UserRewardController {
 		    "An error occured while searching for the cumulative reward point to the user " + userName);
 	
 	return result;
+    }
+    
+    @GetMapping("getAllRewards")
+    public HashMap<String, Object> getAllRewardsThread() {
+	HashMap<String, Object> result = userRewardsService.calculateAllRewardsThread();
+	if(!result.isEmpty()) {
+	    return result;
+	} else {
+	    throw new ThreadTimeOut("Thread execution timed out, more than 20 minutes of searching");
+	}
+	
     }
 
 }

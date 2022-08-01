@@ -240,5 +240,27 @@ public class UserRewardsServiceTest {
 	//THEN
 	assertEquals(result, 0);
     }
+    
+    @Test
+    public void getAllRewardsTest() {
+	//GIVEN
+	VisitedLocation visitedLocation = new VisitedLocation();
+	User user = userRepository.getUser("internalUser91");
+	Double latitude = user.getListVisitedLocations().get(0).location.latitude;
+	Double longitude = user.getListVisitedLocations().get(0).location.longitude;
+	Location location = new Location(latitude, longitude);
+	visitedLocation.setLocation(location);
+	visitedLocation.setUserId(user.getUserId());
+	UUID idDisney = UUID.randomUUID();
+	Attraction attraction = new Attraction(idDisney, "Disneyland", "Anaheim", "CA", latitude, longitude);
+	UserReward reward = new UserReward(visitedLocation, attraction, 100);
+	user.addUserReward(reward);
+	HashMap<String, Object> result = new HashMap<>();
+	//WHEN
+	result = userRewardsService.getAllRewards();
+	//THEN
+	assertEquals(result.containsValue(user.getUserRewards()), true);
+	
+    }
 
 }
