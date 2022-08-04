@@ -29,17 +29,6 @@ public class UserRewardController {
 	return result;
     }
     
-    @GetMapping("calculateAllRewardsPointOfUsers")
-    public HashMap<String, Object> calculateAllRewardPoint() {
-	HashMap<String, Object> result = new HashMap<>();
-	result = userRewardsService.calculateAllRewardsOfUsers();
-	if(result.isEmpty())
-	    throw new CalculateRewardPointError(
-		    "An error occured while calculation of reward points to the users ");
-	
-	return result;
-    }
-    
     @GetMapping("cumulativeRewardPoint/{userName}")
     public int cumulativeRewardPoint(@PathVariable String userName) {
 	int result = -1;

@@ -68,7 +68,7 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
 				user.addUserReward(new UserReward(userLocation, attraction, rewardPoint));
 				logger.info("The reward is valid");
 			    } else {
-				logger.info("The attraction is too far");
+				logger.info("The attraction " + attraction.getAttractionName() + " is too far");
 			    }
 			} else {
 			    logger.info("A reward is already saved with these attraction");
@@ -86,62 +86,6 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
 	    logger.error("An error has occurred, the user is unknown");
 	}
 	return result;
-    }
-
-    @Override
-    public HashMap<String, Object> calculateAllRewardsOfUsers() {
-	HashMap<String, Object> result = new HashMap<>();
-	List<User> users = userRepository.getAllUsers();
-	List<Attraction> attractions = gpsUtilProxy.getAllAttractions();
-	logger.debug("Verification of all users rewards");
-
-	if(!users.isEmpty() && !attractions.isEmpty()) {
-	    users.forEach(user -> {
-		HashMap<String, Integer> rewardResult = new HashMap<>();
-		List<VisitedLocation> userLocations = user.getListVisitedLocations();
-
-		    if(!userLocations.isEmpty()) {
-			userLocations.forEach(location -> {
-			    attractions.forEach(attraction -> {
-
-				if(user.getUserRewards().isEmpty() || user.getUserRewards().stream()
-					.filter(r -> r.attraction.getAttractionName().equals(attraction.getAttractionName()))
-					.count() == 0) {
-				    if(distanceCalculService.nearAttraction(location, attraction)) {
-					HashMap<String, Object> mapId = new HashMap<>();
-					mapId.put("attractionId", attraction.getAttractionId());
-					mapId.put("userId", user.getUserId());
-					HashMap<String, Integer> rewardCentralProxyResult = rewardCentralProxy
-						.getRewardPoints(mapId);
-					int rewardPoint = rewardCentralProxyResult.get("reward").intValue();
-					UserReward userReward = new UserReward(location, attraction, rewardPoint);
-					user.addUserReward(userReward);
-					rewardResult.put(attraction.attractionName, rewardPoint);
-					logger.info("The reward is valid for attraction " + attraction.attractionName);
-				    } else {
-					logger.info("The attraction " + attraction.attractionName
-						+ " is too far for user " + user.getUserName());
-				    }
-				} else {
-				    logger.info("A reward is already saved with these attraction");
-				}
-
-			    });
-			});
-
-		    } else {
-			logger.error("An error has occurred, the list of locations is empty for user " + user.getUserName());
-		    }
-		    if(!user.getUserRewards().isEmpty()) {
-			result.put(user.getUserName(), user.getUserRewards());
-		    }
-		
-	    });
-	} else {
-	    logger.error("An error has occured, the list of users or attractions is empty");
-	}
-	return result;
-
     }
 
     @Override
@@ -176,10 +120,13 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
     public HashMap<String, Object> calculateAllRewardsThread() {
 	HashMap<String, Object> result = new HashMap<>();
 	ExecutorService executor = Executors.newFixedThreadPool(1000);
+	List<User> users = userRepository.getAllUsers();
 	boolean threadStop = false;
 	
-	CompletableFuture.supplyAsync(() -> calculateAllRewardsOfUsers() ,executor);
+	users.forEach(user -> {
+	CompletableFuture.supplyAsync(() -> calculReward(user.getUserName()) ,executor);
 	
+	});
 	try {
 		executor.shutdown();
 		threadStop = executor.awaitTermination(20, TimeUnit.MINUTES);
