@@ -66,7 +66,7 @@ public class AttractionServiceTest {
 	//GIVEN
 	List<Attraction> result = new ArrayList<>();
 	//WHEN
-	result = attractionService.getNearByAttractions("internalUser400");
+	result = attractionService.getNearByAttractions("internalUser400000");
 	//THEN
 	assertEquals(result.isEmpty(), true);
     }

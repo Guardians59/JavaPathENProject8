@@ -162,55 +162,6 @@ public class UserRewardsServiceTest {
     }
     
     @Test
-    public void calculAllRewardTest() {
-	//GIVEN
-	User user = userRepository.getUser("internalUser3");
-	Double latitude = user.getListVisitedLocations().get(0).location.latitude;
-	Double longitude = user.getListVisitedLocations().get(0).location.longitude;
-	User user2 = userRepository.getUser("internalUser4");
-	Double latitude2 = user2.getListVisitedLocations().get(0).location.latitude;
-	Double longitude2 = user2.getListVisitedLocations().get(0).location.longitude;
-	List<Attraction> list = new ArrayList<>();
-	UUID idDisney = UUID.randomUUID();
-	UUID idJackson = UUID.randomUUID();
-	UUID idMojave = UUID.randomUUID();
-	UUID idJoshua = UUID.randomUUID();
-	UUID idBuffalo = UUID.randomUUID();
-	list.add(new Attraction(idDisney, "Disneyland", "Anaheim", "CA", latitude, longitude));
-	list.add(new Attraction(idJackson, "Jackson Hole", "Jackson Hole", "WY", (latitude + 0.000005), longitude));
-	list.add(new Attraction(idMojave,"Mojave National Preserve", "Kelso", "CA", latitude2, longitude2));
-	list.add(new Attraction(idJoshua,"Joshua Tree National Park", "Joshua Tree National Park", "CA", 33.881866D, -115.90065D));
-	list.add(new Attraction(idBuffalo,"Buffalo National River", "St Joe", "AR", 35.985512D, -92.757652D));
-	HashMap<String, Object> mapId = new HashMap<>();
-	mapId.put("attractionId", idDisney);
-	mapId.put("userId", user.getUserId());
-	HashMap<String, Object> mapIdSecond = new HashMap<>();
-	mapIdSecond.put("attractionId", idJackson);
-	mapIdSecond.put("userId", user.getUserId());
-	HashMap<String, Object> mapIdTree = new HashMap<>();
-	mapIdTree.put("attractionId", idMojave);
-	mapIdTree.put("userId", user2.getUserId());
-	HashMap<String, Integer> rewardDisney = new HashMap<>();
-	rewardDisney.put("reward", 150);
-	HashMap<String, Integer> rewardJackson = new HashMap<>();
-	rewardJackson.put("reward", 50);
-	HashMap<String, Integer> rewardMojave = new HashMap<>();
-	rewardMojave.put("reward", 30);
-	HashMap<String, Object> result = new HashMap<>();
-	//WHEN
-	when(gpsUtilProxy.getAllAttractions()).thenReturn(list);
-	when(rewardCentralProxy.getRewardPoints(mapId)).thenReturn(rewardDisney);
-	when(rewardCentralProxy.getRewardPoints(mapIdSecond)).thenReturn(rewardJackson);
-	when(rewardCentralProxy.getRewardPoints(mapIdTree)).thenReturn(rewardMojave);
-	result = userRewardsService.calculateAllRewardsOfUsers();
-	System.out.println(result);
-	//THEN
-	assertEquals(result.containsKey("internalUser3"), true);
-	assertEquals(result.containsKey("internalUser4"), true);
-	
-    }
-    
-    @Test
     public void cumulativeRewardPointsTest() {
 	User user = userRepository.getUser("internalUser30");
 	Location location = new Location(40.153788, 120.243566D);

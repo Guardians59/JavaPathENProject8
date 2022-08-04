@@ -45,7 +45,7 @@ public class UserLocationServiceTest {
 	//GIVEN
 	HashMap<Object, Object> result = new HashMap<>();
 	//WHEN
-	result = userLocationService.getCurrentUserLocation("internalUser101");
+	result = userLocationService.getCurrentUserLocation("internalUser101000");
 	//THEN
 	assertEquals(result.isEmpty(), true);
     }
@@ -76,8 +76,8 @@ public class UserLocationServiceTest {
 	HashMap<Object, Object> result = new HashMap<>();
 	List<String> userNames = new ArrayList<>();
 	userNames.add("internalUser2");
-	userNames.add("internalUser300");
-	userNames.add("internalUser400");
+	userNames.add("internalUser300000");
+	userNames.add("internalUser400000");
 	UUID id = userRepository.getUser("internalUser2").getUserId();
 	//WHEN
 	result = userLocationService.getCurrentLocationOfUsers(userNames);
@@ -92,8 +92,8 @@ public class UserLocationServiceTest {
 	//GIVEN
 	HashMap<Object, Object> result = new HashMap<>();
 	List<String> userNames = new ArrayList<>();
-	userNames.add("internalUser200");
-	userNames.add("internalUser300");
+	userNames.add("internalUser200000");
+	userNames.add("internalUser300000");
 	//WHEN
 	result = userLocationService.getCurrentLocationOfUsers(userNames);
 	//THEN
@@ -139,15 +139,15 @@ public class UserLocationServiceTest {
 	HashMap<String, Object> result = new HashMap<>();
 	List<String> userNames = new ArrayList<>();
 	userNames.add("internalUser5");
-	userNames.add("internalUser600");
-	userNames.add("internalUser700");
+	userNames.add("internalUser600000");
+	userNames.add("internalUser700000");
 	//WHEN
 	result = userLocationService.getUsersLocationsHistorical(userNames);
 	//THEN
 	assertEquals(result.isEmpty(), false);
 	assertEquals(result.containsKey("internalUser5"), true);
-	assertEquals(result.containsKey("internalUser600"), false);
-	assertEquals(result.containsKey("internalUser700"), false);
+	assertEquals(result.containsKey("internalUser600000"), false);
+	assertEquals(result.containsKey("internalUser700000"), false);
     }
     
     @Test
@@ -155,8 +155,8 @@ public class UserLocationServiceTest {
 	//GIVEN
 	HashMap<String, Object> result = new HashMap<>();
 	List<String> userNames = new ArrayList<>();
-	userNames.add("internalUser500");
-	userNames.add("internalUser600");
+	userNames.add("internalUser500000");
+	userNames.add("internalUser600000");
 	//WHEN
 	result = userLocationService.getUsersLocationsHistorical(userNames);
 	//THEN

@@ -120,7 +120,7 @@ public class UserPreferencesServiceTest {
 	newUserPreferences.setTicketQuantity(5);
 	newUserPreferences.setAttractionProximity(Integer.MAX_VALUE);
 	//WHEN
-	result = userPreferencesService.updateUserPreferences("internalUser102", newUserPreferences);
+	result = userPreferencesService.updateUserPreferences("internalUser102000", newUserPreferences);
 	//THEN
 	assertEquals(result, -1);
     }

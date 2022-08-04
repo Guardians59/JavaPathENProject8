@@ -72,7 +72,7 @@ public class TripPricerServiceTest {
 	//GIVEN
 	List<Provider> result = new ArrayList<>();
 	//WHEN
-	result = tripPricerService.getTripDealsUser("internalUser500", "test-server-api-key");
+	result = tripPricerService.getTripDealsUser("internalUser500000", "test-server-api-key");
 	//THEN
 	assertEquals(result.isEmpty(), true);
     }
