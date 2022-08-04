@@ -85,6 +85,7 @@ classDirectories.setFrom(files(classDirectories.files.collect {
     	"**/*tourGuide/helper/**",
     	"**/*tourGuide/model/**",
     	"**/*tourGuide/proxies/**",
+    	"**/*tourGuide/service/impl/DistanceCalculServiceImpl.class",
     	"**/*tourGuide/tracker/**"
     		])
     	}))

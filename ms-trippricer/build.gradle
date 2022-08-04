@@ -64,7 +64,6 @@ jacocoTestReport {
 classDirectories.setFrom(files(classDirectories.files.collect {
 		fileTree(dir: it,
     exclude: [
-    	"**/*ms/trippricer/controller/exception/**",
     	"**/*ms/trippricer/model/**"
     		])
     	}))
@@ -72,16 +71,3 @@ classDirectories.setFrom(files(classDirectories.files.collect {
 }
 
 test.finalizedBy jacocoTestReport
-check.dependsOn jacocoTestCoverageVerification
-
-jacocoTestCoverageVerification {
-  violationRules {
-    rule {
-      limit {
-        counter = 'LINE'
-        value = 'COVEREDRATIO'
-        minimum = 0.5
-      }
-    }
-  }
-}
