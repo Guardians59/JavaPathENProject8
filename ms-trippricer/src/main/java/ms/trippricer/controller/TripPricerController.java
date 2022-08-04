@@ -40,7 +40,8 @@ public class TripPricerController {
     
     @PostMapping("/getTripDeals")
     public List<Provider> getTripDealsProxy(@RequestBody HashMap<String, Object> mapParams) {
-	UUID userId = (UUID) mapParams.get("userId");
+	String id = mapParams.get("userId").toString();
+	UUID userId = UUID.fromString(id);
 	int numberOfAdult = (int) mapParams.get("numberOfAdult");
 	int numberOfChildren = (int) mapParams.get("numberOfChildren");
 	int duration = (int) mapParams.get("duration");
