@@ -57,17 +57,6 @@ jacocoTestReport {
         csv.enabled false
         html.destination file("${buildDir}/jacocoHtml")
     }
-    dependsOn test
-    afterEvaluate {
-
-classDirectories.setFrom(files(classDirectories.files.collect {
-		fileTree(dir: it,
-    exclude: [
-    	"**/*ms/rewardcentral/service/impl/DistanceCalculServiceImpl.class",
-    	"**/*ms/rewardcentral/model/**"
-    		])
-    	}))
-    }
 }
 
 test.finalizedBy jacocoTestReport
