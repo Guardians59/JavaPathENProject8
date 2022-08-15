@@ -12,6 +12,13 @@ import ms.trippricer.model.Provider;
 import ms.trippricer.service.ITripPricerService;
 import tripPricer.TripPricer;
 
+/**
+ * La classe TripPricerServiceImpl est l'implémentation de l'interface ITripPricerService.
+ * 
+ * @see ITripPricerService
+ * @author Dylan
+ *
+ */
 @Service
 public class TripPricerServiceImpl implements ITripPricerService {
 
@@ -24,7 +31,10 @@ public class TripPricerServiceImpl implements ITripPricerService {
 	List<Provider> providers = new ArrayList<>();
 	logger.debug("Search price of providers");
 	if(idUser != null && numberOfAdult > 0 && duration > 0) {
-	    
+	    /*
+	     * On récupére la liste des offres de séjours depuis TripPricer, en utilisant une
+	     * boucle forEach pour ajouter chaque offre de chaque fournisseurs à la liste retournée.
+	     */
 	    tripPricer.getPrice(tripPricerApiKey, idUser, numberOfAdult, numberOfChildren, duration,
 		    cumulRewardPoints).forEach(listProvider -> {
 			Provider provider = new Provider();

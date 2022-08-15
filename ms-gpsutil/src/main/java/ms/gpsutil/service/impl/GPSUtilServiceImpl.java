@@ -21,6 +21,13 @@ import ms.gpsutil.model.VisitedLocation;
 import ms.gpsutil.service.IDistanceCalculService;
 import ms.gpsutil.service.IGPSUtilService;
 
+/**
+ * La classe GPSUtilServiceImpl est l'implémentation de l'interface IGPSUtilService.
+ * 
+ * @see IGPSUtilService
+ * @author Dylan
+ *
+ */
 @Service
 public class GPSUtilServiceImpl implements IGPSUtilService {
 
@@ -36,6 +43,13 @@ public class GPSUtilServiceImpl implements IGPSUtilService {
 	VisitedLocation visitedLocation = new VisitedLocation();
 	logger.debug("Search the user location");
 
+	/*
+	 * On essaie de récupérer la location de l'utilisateur via gpsUtil, la date,
+	 * et nous ajoutons ces informations à notre model VisitedLocation avec l'id de
+	 * l'utilisateur.
+	 * On capture l'exception Throwable en cas de NumberFormatException liée au formatage de
+	 * la date.
+	 */
 	if(userId != null) {
 	    try {
 		Double latitude = gpsUtil.getUserLocation(userId).location.latitude;
@@ -45,7 +59,7 @@ public class GPSUtilServiceImpl implements IGPSUtilService {
 		visitedLocation.setUserId(userId);
 		visitedLocation.setLocation(location);
 		visitedLocation.setTimeVisited(date);
-	    } catch (NumberFormatException e) {
+	    } catch (Throwable e) {
 		logger.error("An error has occurred in the format of the position");
 	    }
 	    logger.info("The user's location was found successfully");
@@ -63,7 +77,14 @@ public class GPSUtilServiceImpl implements IGPSUtilService {
 	logger.debug("Search for the five nearest attractions to the user");
 
 	if(visitedLocation.getUserId() != null && visitedLocation.getLocation() != null) {
-
+	    /*
+	     * On utilise une boucle forEach sur la liste d'attractions depuis gpsUtil,
+	     * on récupère la localisation de celle-ci, on calcul la distance entre l'utilisateur
+	     * et l'attraction, on l'ajoute à notre treemap qui classera par ordre croissant les
+	     * distances, ainsi lorsque la treemap à déjà 5 attractions, on vérifie si la distance
+	     * de la nouvelle attraction est inférieur à la dernière enregistrée dans la map, si telle
+	     * est le cas nous supprimons la dernière valeur pour ajouter la nouvelle.
+	     */
 	    gpsUtil.getAttractions().forEach(attraction -> {
 		Attraction addAttraction = new Attraction();
 		addAttraction.setAttractionId(attraction.attractionId);
@@ -87,6 +108,10 @@ public class GPSUtilServiceImpl implements IGPSUtilService {
 		}
 	    });
 
+	    /*
+	     * On  récupère le nom des 5 attractions présent dans la treemap, pour les ajouter
+	     * à notre liste de model Attraction qui sera retourner.
+	     */
 	    Set<Entry<Double, String>> set = distanceList.entrySet();
 	    set.stream().forEach(attractionDistance -> {
 		String key = attractionDistance.getValue();
@@ -112,7 +137,9 @@ public class GPSUtilServiceImpl implements IGPSUtilService {
     public List<Attraction> getAllAttractions() {
 	List<Attraction> listAttraction = new ArrayList<>();
 	logger.debug("Search the list of attractions");
-	
+	/*
+	 * On utilise une boucle forEach pour récupérer toutes les attractions depuis gpsUtil.
+	 */
 	gpsUtil.getAttractions().forEach(attraction -> {
 	    Attraction addAttraction = new Attraction();
 	    addAttraction.setAttractionId(attraction.attractionId);

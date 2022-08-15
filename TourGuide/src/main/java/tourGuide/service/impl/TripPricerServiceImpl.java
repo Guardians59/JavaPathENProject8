@@ -15,7 +15,13 @@ import tourGuide.proxies.IMicroServiceTripPricerProxy;
 import tourGuide.repositories.UserRepository;
 import tourGuide.service.ITripPricerService;
 import tourGuide.service.IUserRewardsService;
-
+/**
+ * La classe TripPricerServiceImpl est l'implémentation de l'interface ITripPricerService.
+ * 
+ * @see ITripPricerService
+ * @author Dylan
+ *
+ */
 @Service
 public class TripPricerServiceImpl implements ITripPricerService {
     
@@ -39,6 +45,10 @@ public class TripPricerServiceImpl implements ITripPricerService {
 	logger.debug("Search trip deals for user " + userName);
 	
 	if(user != null) {
+	   /*
+	    * On récupère toutes les informations nécessaires dans une HashMap pour faire
+	    * appel au micro-service TripPricer. 
+	    */
 	   HashMap<String, Object> mapParams = new HashMap<>();
 	   mapParams.put("userId", user.getUserId());
 	   mapParams.put("numberOfAdult", user.getUserPreferences().getNumberOfAdults());

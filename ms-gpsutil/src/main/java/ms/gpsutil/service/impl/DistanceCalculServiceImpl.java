@@ -4,7 +4,13 @@ import org.springframework.stereotype.Service;
 
 import ms.gpsutil.model.Location;
 import ms.gpsutil.service.IDistanceCalculService;
-
+/**
+ * La classe DistanceCalculServiceImpl est l'implémentation de l'interface IDistanceCalculService.
+ * 
+ * @see IDistanceCalculService
+ * @author Dylan
+ *
+ */
 @Service
 public class DistanceCalculServiceImpl implements IDistanceCalculService {
 

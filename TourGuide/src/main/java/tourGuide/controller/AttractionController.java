@@ -13,12 +13,24 @@ import tourGuide.controller.exception.ListNearByAttractionsIsEmpty;
 import tourGuide.model.Attraction;
 import tourGuide.service.IAttractionService;
 
+/**
+ * La classe AttractionController est le controller qui permet de gérer les URL renvoyant des
+ * attractions.
+ * @author Dylan
+ *
+ */
 @RestController
 public class AttractionController {
     
     @Autowired
     IAttractionService attractionService;
     
+    /**
+     * La méthode getNearByAttractions permet de récupérer la liste des 5 attractions les plus
+     * proches de la position de l'utilisateur.
+     * @param userName le nom de l'utilisateur.
+     * @return List Attraction des 5 attractions les plus proches.
+     */
     @GetMapping("getNearByAttractions/{userName}")
     public List<Attraction> getNearByAttractions(@PathVariable String userName) {
 	List<Attraction> result = new ArrayList<>();
@@ -30,6 +42,11 @@ public class AttractionController {
 	return result;
     }
     
+    /**
+     * La méthode getAllAttractions permet de récupérer la liste de toutes les attractions
+     * enregistrées.
+     * @return List Attraction les attractions.
+     */
     @GetMapping("getAllAttractions")
     public List<Attraction> getAllAttractions() {
 	List<Attraction> result = new ArrayList<>();

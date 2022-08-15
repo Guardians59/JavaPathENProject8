@@ -2,7 +2,6 @@ package tourGuide.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,13 @@ import tourGuide.model.User;
 import tourGuide.proxies.IMicroServiceGPSUtilProxy;
 import tourGuide.repositories.UserRepository;
 import tourGuide.service.IAttractionService;
-
+/**
+ * La classe AttractionServiceImpl est l'implémentation de l'interface IAttractionService.
+ * 
+ * @see IAttractionService
+ * @author Dylan
+ *
+ */
 @Service
 public class AttractionServiceImpl implements IAttractionService {
     

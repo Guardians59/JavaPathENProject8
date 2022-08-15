@@ -11,13 +11,24 @@ import tourGuide.controller.exception.CalculateRewardPointError;
 import tourGuide.controller.exception.CumulativeRewardPointError;
 import tourGuide.controller.exception.ThreadTimeOut;
 import tourGuide.service.IUserRewardsService;
-
+/**
+ * La classe UserRewardController permet de gérer les URL de calcul des rewards.
+ * @author Dylan
+ *
+ */
 @RestController
 public class UserRewardController {
     
     @Autowired
     IUserRewardsService userRewardsService;
     
+    /**
+     * La méthode calculateRewardPoint permet de calculer les rewards disponibles pour
+     * l'utilisateur selon ses lieux visités.
+     * @param userName le nom de l'utilisateur.
+     * @return HashMap avec le nom de l'utilisateur et le model UserReward avec ses informations de
+     * localisation, l'attraction et le nombre de reward.
+     */
     @GetMapping("calculateRewardPoint/{userName}")
     public HashMap<String, Object> calculateRewardPoint(@PathVariable String userName) {
 	HashMap<String, Object> result = new HashMap<>();
@@ -28,7 +39,12 @@ public class UserRewardController {
 	
 	return result;
     }
-    
+    /**
+     * La méthode cumulativeRewardPoint permet de récupérer le nombre total de reward gagner
+     * par l'utilisateur.
+     * @param userName le nom de l'utilisateur.
+     * @return int le nombre total de reward enregistrés.
+     */
     @GetMapping("cumulativeRewardPoint/{userName}")
     public int cumulativeRewardPoint(@PathVariable String userName) {
 	int result = -1;
@@ -39,10 +55,15 @@ public class UserRewardController {
 	
 	return result;
     }
-    
+    /**
+     * La méthode getAllRewardsThread permet de calculer les rewards disponibles pour tous les
+     * utilisateurs selon leurs lieux visités, en utilisant le multithreading pour plus de rapidité.
+     * @return HashMap avec les noms des utilisateurs et le model UserReward avec leurs informations de
+     * localisation, l'attraction et le nombre de reward.
+     */
     @GetMapping("getAllRewards")
     public HashMap<String, Object> getAllRewardsThread() {
-	HashMap<String, Object> result = userRewardsService.calculateAllRewardsThread();
+	HashMap<String, Object> result = userRewardsService.calculAllRewardsThread();
 	if(!result.isEmpty()) {
 	    return result;
 	} else {

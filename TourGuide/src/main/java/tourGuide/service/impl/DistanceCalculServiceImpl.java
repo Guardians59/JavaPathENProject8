@@ -1,12 +1,18 @@
 package tourGuide.service.impl;
 
-
 import org.springframework.stereotype.Service;
 
 import tourGuide.model.Attraction;
 import tourGuide.model.Location;
 import tourGuide.model.VisitedLocation;
 import tourGuide.service.IDistanceCalculService;
+/**
+ * La classe DistanceCalculServiceImpl est l'implémentation de l'interface IDistanceCalculService.
+ * 
+ * @see IDistanceCalculService
+ * @author Dylan
+ *
+ */
 @Service
 public class DistanceCalculServiceImpl implements IDistanceCalculService {
     

@@ -22,6 +22,13 @@ import tourGuide.repositories.UserRepository;
 import tourGuide.service.IDistanceCalculService;
 import tourGuide.service.IUserRewardsService;
 
+/**
+ * La classe UserRewardsServiceImpl est l'implémentation de l'interface IUserRewardsService.
+ * 
+ * @see IUserRewardsService
+ * @author Dylan
+ *
+ */
 @Service
 public class UserRewardsServiceImpl implements IUserRewardsService {
 
@@ -47,7 +54,14 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
 	List<Attraction> attractions = gpsUtilProxy.getAllAttractions();
 	HashMap<String, Object> result = new HashMap<>();
 	logger.debug("Verification of user rewards");
-
+	/*
+	 * On récupère la liste des localisations de l'utilisateur.
+	 * On utilise des boucles forEach sur la liste d'attractions et sur la liste des localisations
+	 * Si l'utilisateur n'a pas de reward enregistré avec l'attraction, on vérifie si la distance
+	 * correspond selon la localisation de l'attraction et celle de l'utilisateur, si tel est
+	 * le cas on fait appel au micro-service RewardCentral afin de calculer le reward disponible
+	 * pour l'utilisateur, et de le sauvegardé dans sa liste de reward.
+	 */
 	if(user != null) {
 	    List<VisitedLocation> userLocations = user.getListVisitedLocations();
 	    
@@ -94,6 +108,7 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
 	int resultPoints = -1;
 	logger.info("Search the cumulative points of user " + userName);
 	if(user != null) {
+	    //On récupère la somme de tous les rewards enregistrés de l'utilisateur.
 	    resultPoints = user.getUserRewards().stream().mapToInt(i -> i.getRewardPoints()).sum();
 	    if(resultPoints > 0) {
 		logger.info("The cumulative points have been successfully found");
@@ -110,6 +125,10 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
     public HashMap<String, Object> getAllRewards() {
 	HashMap<String, Object> result = new HashMap<>();
 	List<User> users = userRepository.getAllUsers();
+	/*
+	 * On utilise une boucle forEach afin de récupérer tous les rewards enregistrés de chaque
+	 * utilisateurs.
+	 */
 	users.forEach(user -> {
 	    result.put(user.getUserName(), user.getUserRewards());
 	});
@@ -117,18 +136,23 @@ public class UserRewardsServiceImpl implements IUserRewardsService {
     }
     
     @Override
-    public HashMap<String, Object> calculateAllRewardsThread() {
+    public HashMap<String, Object> calculAllRewardsThread() {
 	HashMap<String, Object> result = new HashMap<>();
+	//On initie un executor avec 1000 Thread.
 	ExecutorService executor = Executors.newFixedThreadPool(1000);
 	List<User> users = userRepository.getAllUsers();
 	boolean threadStop = false;
-	
+	/*
+	 * On utilise CompletableFuture pour calculer les rewards des utilisateurs avec l'executor,
+	 * pouvant donc lancer le calcul de 1000 rewards simultanément.
+	 */
 	users.forEach(user -> {
-	CompletableFuture.supplyAsync(() -> calculReward(user.getUserName()) ,executor);
+	    CompletableFuture.supplyAsync(() -> calculReward(user.getUserName()) ,executor);
 	
 	});
 	try {
 		executor.shutdown();
+		//On vérifie que les calculs se terminent dans le temps imparti.
 		threadStop = executor.awaitTermination(20, TimeUnit.MINUTES);
 	    } catch (Exception e) {
 		executor.shutdown();

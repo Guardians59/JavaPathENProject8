@@ -18,7 +18,13 @@ import tourGuide.model.VisitedLocation;
 import tourGuide.proxies.IMicroServiceGPSUtilProxy;
 import tourGuide.repositories.UserRepository;
 import tourGuide.service.IUserLocationService;
-
+/**
+ * La classe UserLocationServiceImpl est l'implémentation de l'interface IUserLocationService.
+ * 
+ * @see IUserLocationService
+ * @author Dylan
+ *
+ */
 @Service
 public class UserLocationServiceImpl implements IUserLocationService {
     
@@ -40,13 +46,18 @@ public class UserLocationServiceImpl implements IUserLocationService {
 	
 	if(user != null) {
 	    if(!user.getListVisitedLocations().isEmpty()) {
-	int size = user.getListVisitedLocations().size();
-	int lastVisited = size - 1;
-	Double longitude = user.getListVisitedLocations().get(lastVisited).location.longitude;
-	Double latitude = user.getListVisitedLocations().get(lastVisited).location.latitude;
-	Location location = new Location(latitude, longitude);
-	result.put(user.getUserId(), location);
-	logger.info("The last current location was successfully retrieved");
+		/*
+		 * On récupère la dernière localisation enregistrée dans la liste des
+		 * localisations de l'utilisateur, et on l'ajoute à une HashMap avec l'id
+		 * de celui-ci.
+		 */
+		int size = user.getListVisitedLocations().size();
+		int lastVisited = size - 1;
+		Double longitude = user.getListVisitedLocations().get(lastVisited).location.longitude;
+		Double latitude = user.getListVisitedLocations().get(lastVisited).location.latitude;
+		Location location = new Location(latitude, longitude);
+		result.put(user.getUserId(), location);
+		logger.info("The last current location was successfully retrieved");
 	    } else {
 		logger.info("No location register for this user " + user.getUserName());
 	    }
@@ -60,6 +71,12 @@ public class UserLocationServiceImpl implements IUserLocationService {
     public HashMap<Object, Object> getCurrentLocationOfUsers(List<String> userNames) {
 	HashMap<Object, Object> result = new HashMap<>();
 	logger.info("Find the last current location of each users");
+	/*
+	 * On utilise une boucle forEach pour récupérer la dernière localisation enregistrée
+	 * de chaque utilisateur présent en paramètre.
+	 * On ajoute les id des utilisateurs avec leurs localisations respectives dans une
+	 * HashMap.
+	 */
 	userNames.forEach(userName -> {
 	    User user = new User();
 	    user = userRepository.getUser(userName);
@@ -92,6 +109,12 @@ public class UserLocationServiceImpl implements IUserLocationService {
 	HashMap<Object, Object> result = new HashMap<>();
 	List<User> users = userRepository.getAllUsers();
 	logger.info("Find the last current location of each users");
+	/*
+	 * On utilise une boucle forEach pour récupérer la dernière localisation enregistrée
+	 * de tous les utilisateurs.
+	 * On ajoute les id des utilisateurs avec leurs localisations respectives dans une
+	 * HashMap.
+	 */
 	users.forEach(user -> {
 	   
 	    if(!user.getListVisitedLocations().isEmpty()) {
@@ -118,6 +141,12 @@ public class UserLocationServiceImpl implements IUserLocationService {
 	HashMap<String, Object> result = new HashMap<>();
 	List<VisitedLocation> locationHistorical = new ArrayList<>();
 	logger.debug("Search the historical location");
+	/*
+	 * On utilise une boucle forEach pour récupérer la liste des localisations de chaque
+	 * utilisateurs entrés en paramètre.
+	 * On ajoute chaque historique de localisation dans l'HashMap avec le nom de l'utilisateur
+	 * respectif.
+	 */
 	userNames.forEach(userName -> {
 	    User user = new User();
 	    user = userRepository.getUser(userName);
@@ -150,6 +179,10 @@ public class UserLocationServiceImpl implements IUserLocationService {
 	user = userRepository.getUser(userName);
 	logger.debug("Search the location of user " + userName);
 	if(user != null) {
+	    /*
+	     * On récupère la localisation actuel de l'utilisateur en faisant appel au
+	     * micro-service GPSUtil.
+	     */
 	    visitedLocation = gpsUtilProxy.getLocation(user.getUserId());
 	    if(visitedLocation.location != null) {
 	    user.addToListVisitedLocations(visitedLocation);
@@ -165,17 +198,22 @@ public class UserLocationServiceImpl implements IUserLocationService {
 
     @Override
     public HashMap<Object, Object> getAllLocationsThread() {
+	//On initie un executor avec 1000 Thread.
 	ExecutorService executor = Executors.newFixedThreadPool(1000);
 	HashMap<Object, Object> result = new HashMap<>();
 	List<User> users = userRepository.getAllUsers();
 	boolean threadStop = false;
-	
+	/*
+	 * On utilise CompletableFuture pour rechercher la position de chaque utilisateur avec
+	 * l'executor, pouvant donc lancer la recherche de 1000 positions simultanément.
+	 */
 	users.forEach(user -> {
 	    CompletableFuture.supplyAsync(() -> getUserLocation(user.getUserName()), executor);
 		     
 	});
 	try {
 		executor.shutdown();
+		//On vérifie que les recherche se terminent dans le délai imparti.
 		threadStop = executor.awaitTermination(15, TimeUnit.MINUTES);
 	    } catch (Exception e) {
 		executor.shutdown();

@@ -17,6 +17,12 @@ import tourGuide.model.VisitedLocation;
 import tourGuide.service.IUserLocationService;
 import tourGuide.service.impl.UserLocationServiceImpl;
 
+/**
+ * La classe UserLocationController est le controller qui permet de gérer les URL des
+ * localisations des utilisateurs.
+ * @author Dylan
+ *
+ */
 @RestController
 public class UserLocationController {
     
@@ -26,6 +32,11 @@ public class UserLocationController {
     @Autowired
     UserLocationServiceImpl userLocationServiceImpl;
     
+    /**
+     * La méthode getUserLocation permet de récupérer la localisation de l'utilisateur.
+     * @param userName le nom de l'utilisateur.
+     * @return VisitedLocation les informations de localisation.
+     */
     @GetMapping("getLocation/{userName}")
     public VisitedLocation getUserLocation(@PathVariable String userName) {
 	VisitedLocation visitedLocation = new VisitedLocation();
@@ -37,6 +48,13 @@ public class UserLocationController {
 	return visitedLocation;
     }
     
+    /**
+     * La méthode getCurrentUserLocation permet de récupérer la dernière localisation enregistrée
+     * de l'utilisateur.
+     * @param userName le nom de l'utilisateur.
+     * @return HashMap avec l'id de l'utilisateur et le model VisitedLocation pour avoir les
+     * informations de localisation.
+     */
     @GetMapping("getCurrentLocation/{userName}")
     public HashMap<Object, Object> getCurrentUserLocation(@PathVariable String userName) {
 	HashMap<Object, Object> result = new HashMap<>();
@@ -47,7 +65,13 @@ public class UserLocationController {
 	
 	return result;
     }
-    
+    /**
+     * La méthode getCurrentLocationsOfUsers permet de récupérer la dernière localisation enregistrée
+     * de plusieurs utilisateurs.
+     * @param userNames les noms des utilisateurs.
+     * @return HashMap avec les id des utilisateurs et le model VisitedLocation pour avoir les
+     * informations des localisations.
+     */
     @GetMapping("getCurrentLocationsOfUsers/{userNames}")
     public HashMap<Object, Object> getCurrentLocationsOfUsers(@PathVariable List<String> userNames) {
 	HashMap<Object, Object> result = new HashMap<>();
@@ -58,7 +82,12 @@ public class UserLocationController {
 	
 	return result;
     }
-    
+    /**
+     * La méthode getAllCurrentLocations permet de récupérer la dernière localisation enregistrée
+     * de tous les utilisateurs.
+     * @return HashMap avec les id des utilisateurs et le model VisitedLocation pour avoir les
+     * informations des localisations.
+     */
     @GetMapping("getAllCurrentLocations")
     public HashMap<Object, Object> getAllCurrentLocations() {
 	HashMap<Object, Object> result = new HashMap<>();
@@ -69,7 +98,12 @@ public class UserLocationController {
 	
 	return result;
     }
-    
+    /**
+     * La méthode getUsersLocationsHistorical permet de récupérer l'historique des localisations
+     * enregistrées des utilisateurs.
+     * @param userNames le nom des utilisateurs.
+     * @return HashMap avec le nom de l'utilisateur et une liste du model VisitedLocation.
+     */
     @GetMapping("getUsersLocationsHistorical/{userNames}")
     public HashMap<String, Object> getUsersLocationsHistorical(@PathVariable List<String> userNames) {
 	HashMap<String, Object> result = new HashMap<>();
@@ -80,8 +114,12 @@ public class UserLocationController {
 	
 	return result;
     }
-    
-   @GetMapping("getAllLocations")
+    /**
+     * La méthode getAllLocationsThread permet de récupérer la localisation de tous les utilisateurs
+     * en utilisant le multithreading pour plus de rapidité.
+     * @return HashMap avec les id des utilisateurs et le model VisitedLocation.
+     */
+    @GetMapping("getAllLocations")
     public HashMap<Object, Object> getAllLocationsThread() {
 	HashMap<Object, Object> result = userLocationService.getAllLocationsThread();
 	if(!result.isEmpty()) {
