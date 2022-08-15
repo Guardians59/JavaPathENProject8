@@ -92,7 +92,7 @@ public class TestPerformance {
 	});
 	StopWatch stopWatch = new StopWatch();
 	stopWatch.start();
-	userRewardsService.calculateAllRewardsThread();
+	userRewardsService.calculAllRewardsThread();
 	stopWatch.stop();
 
 	System.out.println("highVolumeGetRewards: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime())
