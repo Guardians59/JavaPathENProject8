@@ -3,7 +3,6 @@ package tourGuide.performance;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.jupiter.api.Test;
@@ -14,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import tourGuide.helper.InternalTestHelper;
-import tourGuide.model.Attraction;
 import tourGuide.model.Location;
-import tourGuide.model.UserReward;
 import tourGuide.model.VisitedLocation;
 import tourGuide.repositories.DB;
 import tourGuide.repositories.UserRepository;
@@ -81,14 +78,11 @@ public class TestPerformance {
     @Test
     @Order(2)
     public void highVolumeGetRewards() {
-	Location location = new Location(34.817595D, -125.922008D);
+	Location location = new Location(33.817595D, -117.922008D);
 	Date date = new Date();
-	UUID idDisney = UUID.randomUUID();
-	Attraction attraction = new Attraction(idDisney, "Disneyland", "Anaheim", "CA", location.latitude, location.longitude);
 	userRepository.getAllUsers().forEach(u -> {
 	    VisitedLocation visitedLocation = new VisitedLocation(u.getUserId(), location, date);
-	    UserReward reward = new UserReward(visitedLocation, attraction, 60);
-	    u.addUserReward(reward);
+	    u.addToListVisitedLocations(visitedLocation);
 	});
 	StopWatch stopWatch = new StopWatch();
 	stopWatch.start();
