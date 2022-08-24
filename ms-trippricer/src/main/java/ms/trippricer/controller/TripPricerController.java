@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import ms.trippricer.controller.exception.ProviderException;
 import ms.trippricer.model.Provider;
 import ms.trippricer.service.ITripPricerService;
@@ -23,6 +25,7 @@ import ms.trippricer.service.ITripPricerService;
  * @author Dylan
  *
  */
+@Api("API des offres de séjours")
 @RestController
 public class TripPricerController {
 
@@ -40,6 +43,7 @@ public class TripPricerController {
      * @param tripPricerApiKey la clé d'api.
      * @return List Provider des séjours proposés.
      */
+    @ApiOperation(value = "Récupère la liste des offres de séjours des fournisseurs.")
     @GetMapping("/getTripDeals")
     public List<Provider> getTripDeals(@RequestParam UUID idUser, @RequestParam int numberOfAdult,
 	    @RequestParam int numberOfChildren, @RequestParam int duration, @RequestParam int cumulRewardPoint,
@@ -61,6 +65,7 @@ public class TripPricerController {
      * @param mapParams map contenant tous les paramètres nécessaires au fonctionnement du service.
      * @return List Provider des séjours proposés.
      */
+    @ApiOperation(value = "Envoie la liste des offres de séjours des fournisseurs au proxy.")
     @PostMapping("/getTripDeals")
     public List<Provider> getTripDealsProxy(@RequestBody HashMap<String, Object> mapParams) {
 	String id = mapParams.get("userId").toString();

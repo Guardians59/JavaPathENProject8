@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import ms.rewardcentral.controller.exception.RewardException;
 import ms.rewardcentral.service.IRewardCentralService;
 
@@ -33,6 +34,7 @@ public class RewardCentralController {
      * @param userId l'id de l'utilisateur.
      * @return HashMap String Integer avec la clé reward et sa valeur.
      */
+    @ApiOperation(value = "Récupère le résultat du calcul les rewards disponibles selon l'attraction et l'utilisateur.")
     @GetMapping("/getRewardPoints")
     public HashMap<String, Integer> getRewardPoints(@RequestParam UUID attractionId, @RequestParam UUID userId) {
 	HashMap<String, Integer> result = new HashMap<>();
@@ -49,6 +51,7 @@ public class RewardCentralController {
      * @param mapId les id nécessaires, l'id de l'attraction ainsi que celui de l'utilisateur.
      * @return HashMap String Integer avec la clé reward et sa valeur.
      */
+    @ApiOperation(value = "Envoie le resultat du calcul des rewards disponibles selon l'attraction et l'utilisateur au proxy.")
     @PostMapping("/getRewardPoints")
     public HashMap<String, Integer> getRewardPointsProxy(@RequestBody HashMap<String, Object> mapId) {
 	HashMap<String, Integer> result = new HashMap<>();
