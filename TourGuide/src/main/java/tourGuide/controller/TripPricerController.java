@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import tourGuide.controller.exception.TripDealsError;
 import tourGuide.model.Provider;
 import tourGuide.service.ITripPricerService;
@@ -32,6 +33,7 @@ public class TripPricerController {
      * @param apiKey la clé d'api.
      * @return List Provider les offres de séjours des fournisseurs.
      */
+    @ApiOperation(value = "Récupère la liste des offres de séjours des fournisseurs.")
     @GetMapping("getTripDeals/{userName}")
     public List<Provider> getTripDealsUser(@PathVariable String userName, @RequestParam String apiKey) {
 	List<Provider> result = new ArrayList<>();

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import io.swagger.annotations.ApiOperation;
 import tourGuide.controller.exception.UserPreferencesError;
 import tourGuide.model.UserPreferences;
 import tourGuide.service.IUserPreferencesService;
@@ -34,6 +35,7 @@ public class UserPreferencesController {
      * @return Status OK si la modification à réussi ou notFound si une erreur est rencontrée.
      * @throws JsonProcessingException si une erreur avec JSON est rencontrée.
      */
+    @ApiOperation(value = "Modifie les préférences de séjour de l'utilisateur.")
     @PutMapping("updateUserPreferences/{userName}")
     public ResponseEntity<?> updateUserPreferences(@PathVariable String userName, @RequestBody UserPreferences userPreferences) throws JsonProcessingException {
 	int result;
@@ -54,6 +56,7 @@ public class UserPreferencesController {
      * @param userName le nom de l'utilisateur.
      * @return UserPreferences le model des préférences de l'utilisateur.
      */
+    @ApiOperation(value = "Récupère les préférences de séjour de l'utilisateur.")
     @GetMapping("getUserPreferences/{userName}")
     public UserPreferences getUserPreferences(@PathVariable String userName) {
 	UserPreferences result = userPreferencesService.getUserPreferences(userName);

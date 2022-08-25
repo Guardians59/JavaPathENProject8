@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import tourGuide.controller.exception.AllCurrentUsersLocationsIsEmpty;
 import tourGuide.controller.exception.CurrentUserLocationIsEmpty;
 import tourGuide.controller.exception.ThreadTimeOut;
@@ -37,6 +38,7 @@ public class UserLocationController {
      * @param userName le nom de l'utilisateur.
      * @return VisitedLocation les informations de localisation.
      */
+    @ApiOperation(value = "Récupère la localisation de l'utilisateur.")
     @GetMapping("getLocation/{userName}")
     public VisitedLocation getUserLocation(@PathVariable String userName) {
 	VisitedLocation visitedLocation = new VisitedLocation();
@@ -55,6 +57,7 @@ public class UserLocationController {
      * @return HashMap avec l'id de l'utilisateur et le model VisitedLocation pour avoir les
      * informations de localisation.
      */
+    @ApiOperation(value = "Récupère la dernière localisation enregistrée de l'utilisateur.")
     @GetMapping("getCurrentLocation/{userName}")
     public HashMap<Object, Object> getCurrentUserLocation(@PathVariable String userName) {
 	HashMap<Object, Object> result = new HashMap<>();
@@ -72,6 +75,7 @@ public class UserLocationController {
      * @return HashMap avec les id des utilisateurs et le model VisitedLocation pour avoir les
      * informations des localisations.
      */
+    @ApiOperation(value = "Récupère la dernière localisation enregistrée des utilisateurs.")
     @GetMapping("getCurrentLocationsOfUsers/{userNames}")
     public HashMap<Object, Object> getCurrentLocationsOfUsers(@PathVariable List<String> userNames) {
 	HashMap<Object, Object> result = new HashMap<>();
@@ -88,6 +92,7 @@ public class UserLocationController {
      * @return HashMap avec les id des utilisateurs et le model VisitedLocation pour avoir les
      * informations des localisations.
      */
+    @ApiOperation(value = "Récupère la dernière localisation enregistrée de tous les utilisateurs.")
     @GetMapping("getAllCurrentLocations")
     public HashMap<Object, Object> getAllCurrentLocations() {
 	HashMap<Object, Object> result = new HashMap<>();
@@ -104,6 +109,7 @@ public class UserLocationController {
      * @param userNames le nom des utilisateurs.
      * @return HashMap avec le nom de l'utilisateur et une liste du model VisitedLocation.
      */
+    @ApiOperation(value = "Récupère l'historique de localisation des utilisateurs.")
     @GetMapping("getUsersLocationsHistorical/{userNames}")
     public HashMap<String, Object> getUsersLocationsHistorical(@PathVariable List<String> userNames) {
 	HashMap<String, Object> result = new HashMap<>();
@@ -119,6 +125,7 @@ public class UserLocationController {
      * en utilisant le multithreading pour plus de rapidité.
      * @return HashMap avec les id des utilisateurs et le model VisitedLocation.
      */
+    @ApiOperation(value = "Récupère la localisation de tous les utilisateurs.")
     @GetMapping("getAllLocations")
     public HashMap<Object, Object> getAllLocationsThread() {
 	HashMap<Object, Object> result = userLocationService.getAllLocationsThread();

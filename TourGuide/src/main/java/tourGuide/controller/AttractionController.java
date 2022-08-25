@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import tourGuide.controller.exception.ListAllAttractionsIsEmpty;
 import tourGuide.controller.exception.ListNearByAttractionsIsEmpty;
 import tourGuide.model.Attraction;
@@ -31,6 +32,7 @@ public class AttractionController {
      * @param userName le nom de l'utilisateur.
      * @return List Attraction des 5 attractions les plus proches.
      */
+    @ApiOperation(value = "Récupère la liste des 5 attractions les plus proches de l'utilisateur.")
     @GetMapping("getNearByAttractions/{userName}")
     public List<Attraction> getNearByAttractions(@PathVariable String userName) {
 	List<Attraction> result = new ArrayList<>();
@@ -47,6 +49,7 @@ public class AttractionController {
      * enregistrées.
      * @return List Attraction les attractions.
      */
+    @ApiOperation(value = "Récupère la liste des attractions.")
     @GetMapping("getAllAttractions")
     public List<Attraction> getAllAttractions() {
 	List<Attraction> result = new ArrayList<>();
