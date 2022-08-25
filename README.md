@@ -25,3 +25,17 @@ Vous pouvez ensuite démarrer l'application TourGuide
 
 Pour arrêter les conteneurs, utiliser la commande suivante :
 docker-compose stop
+
+# Documentation API
+
+Une fois l'application démarrée, vous trouverez la documentation de l'API TourGuide à l'url :
+http://localhost:8080/swagger-ui.html
+
+La documentation de l'API du microService GPS : 
+http://localhost:8081/swagger-ui.html
+
+La documentation de l'API du microService RewardCentral :
+http://localhost:8082/swagger-ui.html
+
+La documentation de l'API du microService TripPricer :
+http://localhost:8083/swagger-ui.html
