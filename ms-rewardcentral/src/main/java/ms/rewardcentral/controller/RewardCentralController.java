@@ -34,7 +34,7 @@ public class RewardCentralController {
      * @param userId l'id de l'utilisateur.
      * @return HashMap String Integer avec la clé reward et sa valeur.
      */
-    @ApiOperation(value = "Récupère le résultat du calcul les rewards disponibles selon l'attraction et l'utilisateur.")
+    @ApiOperation(value = "Recupere le resultat du calcul les rewards disponibles selon l'attraction et l'utilisateur.")
     @GetMapping("/getRewardPoints")
     public HashMap<String, Integer> getRewardPoints(@RequestParam UUID attractionId, @RequestParam UUID userId) {
 	HashMap<String, Integer> result = new HashMap<>();

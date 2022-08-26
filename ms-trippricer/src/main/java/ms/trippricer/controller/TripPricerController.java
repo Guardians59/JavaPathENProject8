@@ -43,7 +43,7 @@ public class TripPricerController {
      * @param tripPricerApiKey la clé d'api.
      * @return List Provider des séjours proposés.
      */
-    @ApiOperation(value = "Récupère la liste des offres de séjours des fournisseurs.")
+    @ApiOperation(value = "Recupere la liste des offres de sejours des fournisseurs.")
     @GetMapping("/getTripDeals")
     public List<Provider> getTripDeals(@RequestParam UUID idUser, @RequestParam int numberOfAdult,
 	    @RequestParam int numberOfChildren, @RequestParam int duration, @RequestParam int cumulRewardPoint,
@@ -65,7 +65,7 @@ public class TripPricerController {
      * @param mapParams map contenant tous les paramètres nécessaires au fonctionnement du service.
      * @return List Provider des séjours proposés.
      */
-    @ApiOperation(value = "Envoie la liste des offres de séjours des fournisseurs au proxy.")
+    @ApiOperation(value = "Envoie la liste des offres de sejours des fournisseurs au proxy.")
     @PostMapping("/getTripDeals")
     public List<Provider> getTripDealsProxy(@RequestBody HashMap<String, Object> mapParams) {
 	String id = mapParams.get("userId").toString();
